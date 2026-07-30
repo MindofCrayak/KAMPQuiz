@@ -15,11 +15,14 @@
 
   <style>
     :root {
-      --kamp-green: #1a472a;
-      --kamp-gold: #c5a059;
-      --kamp-light-gold: #e8d5a5;
+      --kamp-gold: #d4af37;
+      --kamp-mint: #bcdbb0;
+      --kamp-lavender: #ded7f0;
+      --kamp-teal: #0d9488;
+      --kamp-purple: #540162;
+      --kamp-dark: #111827;
+      --kamp-dark-teal: #03444e;
       --space-dark: #020205;
-      --text-light: #f4eee0;
     }
 
     body {
@@ -29,7 +32,6 @@
       /* Original Space Background for the page */
       background: var(--space-dark) url('https://i.imgur.com/rbA1bPE.png') no-repeat center center fixed;
       background-size: cover;
-      color: var(--text-light);
       min-height: 100vh;
       display: flex;
       justify-content: center;
@@ -49,68 +51,69 @@
       border-radius: 8px;
       padding: 40px;
       position: relative;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(0, 0, 0, 0.5);
+      color: var(--kamp-dark);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(0, 0, 0, 0.3);
     }
 
     .kamp-logo {
       display: block;
       max-width: 200px;
       margin: 0 auto 20px auto;
-      filter: drop-shadow(0 0 10px rgba(0,0,0,0.5));
     }
 
     h1.title {
-      color: var(--kamp-gold);
+      color: var(--kamp-purple);
       text-align: center;
       font-size: 2.5rem;
       margin: 10px 0;
-      border-bottom: 1px solid var(--kamp-gold);
+      border-bottom: 2px solid var(--kamp-gold);
       padding-bottom: 10px;
-      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
     }
 
     .letter-content {
       font-size: 1.2rem;
       line-height: 1.6;
       margin-bottom: 30px;
-      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+      color: var(--kamp-dark);
     }
 
     .inline-input {
-      background: rgba(0, 0, 0, 0.2);
+      background: rgba(255, 255, 255, 0.3);
       border: none;
-      border-bottom: 2px dashed var(--kamp-gold);
+      border-bottom: 2px dashed var(--kamp-purple);
       font-family: 'Belleza', sans-serif;
       font-size: 1.2rem;
-      color: var(--kamp-light-gold);
+      color: var(--kamp-purple);
       text-align: center;
       width: 200px;
       outline: none;
       transition: background 0.3s ease;
+      font-weight: bold;
     }
     .inline-input:focus {
-      border-bottom: 2px solid var(--kamp-gold);
-      background: rgba(0, 0, 0, 0.4);
+      border-bottom: 2px solid var(--kamp-dark-teal);
+      background: rgba(255, 255, 255, 0.5);
     }
     .inline-input::placeholder {
-      color: rgba(232, 213, 165, 0.5);
+      color: rgba(84, 1, 98, 0.5); /* Faded purple */
+      font-weight: normal;
     }
 
     .house-desc {
       margin: 20px 0;
       padding: 15px;
-      background: rgba(0, 0, 0, 0.4);
-      border-left: 4px solid var(--kamp-gold);
+      background: rgba(13, 148, 136, 0.15); /* Teal tint */
+      border-left: 4px solid var(--kamp-purple);
       border-radius: 0 4px 4px 0;
     }
 
     .btn {
-      background: rgba(0, 0, 0, 0.6);
+      background: var(--kamp-dark-teal);
       color: var(--kamp-gold);
       font-family: 'Belleza', sans-serif;
       font-size: 1.2rem;
       padding: 12px 24px;
-      border: 1px solid var(--kamp-gold);
+      border: 2px solid var(--kamp-gold);
       border-radius: 4px;
       cursor: pointer;
       width: 100%;
@@ -118,43 +121,42 @@
       margin-top: 15px;
     }
     .btn:hover {
-      background: var(--kamp-gold);
-      color: #000;
-      box-shadow: 0 0 15px rgba(197, 160, 89, 0.6);
+      background: var(--kamp-purple);
+      color: var(--kamp-lavender);
+      border-color: var(--kamp-lavender);
+      box-shadow: 0 0 15px rgba(212, 175, 55, 0.4); /* Gold glow */
     }
 
     /* Quiz Styling */
     .progress-bar-bg {
-      background: rgba(0, 0, 0, 0.5);
-      border: 1px solid var(--kamp-gold);
+      background: rgba(3, 68, 78, 0.2);
+      border: 1px solid var(--kamp-dark-teal);
       border-radius: 4px;
       height: 10px;
       width: 100%;
       margin-bottom: 20px;
     }
     .progress-bar-fill {
-      background: var(--kamp-gold);
+      background: var(--kamp-teal);
       height: 100%;
       width: 0%;
       transition: width 0.3s ease;
-      box-shadow: 0 0 10px var(--kamp-gold);
     }
 
     .question-title {
       font-size: 1.4rem;
-      color: var(--kamp-gold);
+      color: var(--kamp-purple);
       margin-bottom: 20px;
       line-height: 1.5;
       font-weight: bold;
-      text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
     }
 
     .option-btn {
       display: block;
       width: 100%;
-      background: rgba(0, 0, 0, 0.4);
-      border: 1px solid var(--kamp-gold);
-      color: var(--text-light);
+      background: rgba(255, 255, 255, 0.4);
+      border: 1px solid var(--kamp-dark-teal);
+      color: var(--kamp-dark);
       padding: 14px 18px;
       margin-bottom: 12px;
       border-radius: 4px;
@@ -165,23 +167,24 @@
       font-family: 'Belleza', sans-serif;
     }
     .option-btn:hover {
-      background: rgba(197, 160, 89, 0.2);
-      border-color: var(--kamp-light-gold);
-      color: var(--kamp-light-gold);
+      background: var(--kamp-lavender);
+      border-color: var(--kamp-purple);
+      color: var(--kamp-purple);
       transform: translateX(4px);
+      box-shadow: inset 0 0 10px rgba(84, 1, 98, 0.1);
     }
 
     /* Schedule View */
     #dossier {
-      background: rgba(0, 0, 0, 0.6);
-      border: 1px solid var(--kamp-gold);
+      background: var(--kamp-dark);
+      border: 2px solid var(--kamp-gold);
       padding: 30px;
-      color: var(--kamp-light-gold);
+      color: var(--kamp-mint);
       font-family: monospace;
       font-size: 1rem;
       white-space: pre-wrap; 
-      box-shadow: inset 0 0 15px rgba(0,0,0,0.8);
       border-radius: 4px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.5);
     }
 
     .hidden { display: none; }
@@ -216,7 +219,7 @@
 
     <!-- Step 2: Interactive Quiz -->
     <div id="step-quiz" class="hidden">
-      <div style="font-size: 0.9rem; color: var(--kamp-gold); margin-bottom: 10px;" id="question-count">QUESTION 1 OF 20</div>
+      <div style="font-size: 0.9rem; color: var(--kamp-dark-teal); margin-bottom: 10px; font-weight: bold;" id="question-count">QUESTION 1 OF 20</div>
       <div class="progress-bar-bg">
         <div id="progress-fill" class="progress-bar-fill"></div>
       </div>
@@ -241,6 +244,9 @@
   </div>
 
   <script>
+    // PASTE YOUR GOOGLE WEB APP URL HERE:
+    const GOOGLE_SHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwx1xjpqKK0o0TWcrd5FjfdZLlhttLlwc3QZZIkeZ6CPVYkSAUah9Vvb0Y3TrOChFtEFQ/exec";
+
     // Data Structure combining the Questions and the Master Scoring Rubric
     const QUESTIONS = [
       {
@@ -533,6 +539,34 @@
       return "TBD";
     }
 
+    function sendToGoogleSheet(primaryPath, secondaryPath) {
+      if (!GOOGLE_SHEET_SCRIPT_URL || GOOGLE_SHEET_SCRIPT_URL === "https://script.google.com/macros/s/AKfycbwx1xjpqKK0o0TWcrd5FjfdZLlhttLlwc3QZZIkeZ6CPVYkSAUah9Vvb0Y3TrOChFtEFQ/exec") return;
+
+      const formattedScores = Object.entries(pathScores)
+        .filter(([path, pts]) => pts > 0)
+        .map(([path, pts]) => `${path}: ${pts}`)
+        .join(" | ");
+
+      const payload = {
+        parentName: parentName,
+        studentName: studentName,
+        primaryPath: primaryPath,
+        secondaryPath: secondaryPath,
+        elective: savedElective,
+        duty: savedDuty,
+        club: savedClub,
+        goal: savedGoal,
+        scores: formattedScores
+      };
+
+      fetch(GOOGLE_SHEET_SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain" },
+        body: JSON.stringify(payload)
+      }).catch(err => console.error("Database logging error:", err));
+    }
+
     function generateSchedule() {
       document.getElementById("step-result").classList.remove("hidden");
 
@@ -584,6 +618,9 @@ APPROVED BY: Headmistress Kanyssa Applebaum & Headmistrex Syster Satisfaction
 ====================================================================`;
 
       document.getElementById("dossier").innerText = scheduleText;
+      
+      // Send the results to the database
+      sendToGoogleSheet(primaryPath, secondaryPath);
     }
 
     function downloadPDF() {
@@ -592,7 +629,7 @@ APPROVED BY: Headmistress Kanyssa Applebaum & Headmistrex Syster Satisfaction
         margin:       0.5,
         filename:     `${studentName.replace(/\s+/g, '_')}_KAMP_Schedule.pdf`,
         image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, backgroundColor: '#020205' },
+        html2canvas:  { scale: 2, backgroundColor: '#111827' },
         jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
       };
       html2pdf().set(opt).from(element).save();
