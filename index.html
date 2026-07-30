@@ -250,7 +250,7 @@
     // Data Structure combining the Questions and the Master Scoring Rubric
     const QUESTIONS = [
       {
-        id: 1, title: "The Descending Ceiling: You are trapped in a room with a rapidly descending ceiling. What is your immediate instinct?",
+        id: 1, title: "You are trapped in a room with a rapidly descending ceiling. What is your immediate instinct?",
         options: [
           { text: "Find a sturdy pillar or brace yourself beneath a structural beam to physically stall the trap while others look for an exit.", scores: { Gryffon: 2, Hydra: 1 } },
           { text: "Look for the pressure plate, gear mechanism, or counterweight system controlling the ceiling and attempt to disable it.", scores: { Spynx: 2 } },
@@ -259,7 +259,7 @@
         ]
       },
       {
-        id: 2, title: "The Dream Career Title (Aspirations): When you eventually graduate from K.A.M.P., what professional title do you hope to carry into the world?",
+        id: 2, title: "When you eventually graduate from K.A.M.P., what professional title do you hope to carry into the world?",
         options: [
           { text: "Commander of the Perimeter Guard / Field War Strategist", scores: { Gryffon: 2 } },
           { text: "Master Alchemist / Chief Research Officer", scores: { Spynx: 2 } },
@@ -268,7 +268,7 @@
         ]
       },
       {
-        id: 3, title: "Handling a Reckless Mistake: A companion makes a reckless mistake that almost gets the party caught. How do you handle it afterward?",
+        id: 3, title: "A companion makes a reckless mistake that almost gets the party caught. How do you handle it afterward?",
         options: [
           { text: "Put them through a rigorous drill or scenario exercise so muscle memory prevents them from failing under pressure again.", scores: { Gryffon: 2 } },
           { text: "Sit down with them to break down the timeline of events, pointing out exactly where their logic broke down so they learn from it.", scores: { Spynx: 2, Gryffon: 1 } },
@@ -277,7 +277,7 @@
         ]
       },
       {
-        id: 4, title: "Extracurricular Campus Clubs (Clubs): Which student organization or campus club catches your eye for your off-hours?",
+        id: 4, title: "Which student organization or campus club catches your eye for your off-hours?",
         options: [
           { text: "The Tactical Gaming & Strategy Club (Sponsored by Prof. Yvctus)", scores: { Gryffon: 1, Spynx: 1 } },
           { text: "The Botanical Alchemy & Gardening Club (Sponsored by Sympkin Sylverflask)", scores: { Spynx: 1, Hydra: 1 } },
@@ -286,7 +286,7 @@
         ]
       },
       {
-        id: 5, title: "Forest Campsite Setup: You are tasked with preparing a campsite in an unfamiliar, dangerous forest. What task do you claim?",
+        id: 5, title: "You are tasked with preparing a campsite in an unfamiliar, dangerous forest. What task do you claim?",
         options: [
           { text: "Setting up watch rotations, clearing sightlines around the camp, and fortifying the immediate perimeter.", scores: { Gryffon: 2 } },
           { text: "Identifying local flora and water sources, testing the soil for contaminants, and noting weather shifts.", scores: { Spynx: 2 } },
@@ -295,7 +295,7 @@
         ]
       },
       {
-        id: 6, title: "Specialized Elective Major (Electives): Outside your core general studies, which practical application class do you most want to add to your schedule?",
+        id: 6, title: "Outside your core general studies, which practical application class do you most want to add to your schedule?",
         options: [
           { text: "Advanced Armorsmithing, Weapon Forging & Tactical Combat", scores: { Gryffon: 2 } },
           { text: "Ancient History, Cryptography & Lost Sciences", scores: { Spynx: 2 } },
@@ -304,7 +304,7 @@
         ]
       },
       {
-        id: 7, title: "Preferred Tools: What kind of weapon or tool feels most natural in your character's hands?",
+        id: 7, title: "What kind of weapon or tool feels most natural in your character's hands?",
         options: [
           { text: "A well-balanced, reliable weapon or shield that requires practiced footwork and physical conditioning to master.", scores: { Gryffon: 2 } },
           { text: "A finely tuned instrument, intricate toolkit, or complex apparatus that requires technical understanding to operate.", scores: { Spynx: 2 } },
@@ -313,7 +313,7 @@
         ]
       },
       {
-        id: 8, title: "Personal Insults: Which phrase feels most like an insult to your character?",
+        id: 8, title: "Which phrase feels most like an insult to your character?",
         options: [
           { text: "\"You hesitated when it mattered most.\"", scores: { Gryffon: 2 } },
           { text: "\"You don't know what you're talking about.\"", scores: { Spynx: 2 } },
@@ -322,7 +322,7 @@
         ]
       },
       {
-        id: 9, title: "Free Term Days: You are given a week off from classes and duties at K.A.M.P. How do you spend it?",
+        id: 9, title: "You are given a week off from classes and duties at K.A.M.P. How do you spend it?",
         options: [
           { text: "Training in the arena, refining your movement, or organizing a tactical exercise with fellow students.", scores: { Gryffon: 2, Unycorn: 1 } },
           { text: "Locking yourself in the quietest corner of the tower library or alchemical lab pursuing an independent research project.", scores: { Spynx: 2 } },
@@ -331,7 +331,7 @@
         ]
       },
       {
-        id: 10, title: "Superior Opponents: When facing a rival who is clearly more skilled than you, what is your strategy?",
+        id: 10, title: "When facing a rival who is clearly more skilled than you, what is your strategy?",
         options: [
           { text: "Endure their onslaught, study their pattern, and strike decisively when their stamina or guard falters.", scores: { Gryffon: 2, Hydra: 1 } },
           { text: "Analyze their technique, identify their mechanical or tactical blind spot, and exploit it with mathematical precision.", scores: { Spynx: 2, Gryffon: 1 } },
@@ -340,7 +340,7 @@
         ]
       },
       {
-        id: 11, title: "The Fever Watch: You are tasked with keeping watch over a slumbering party member who is fighting off a strange, magical fever. How do you pass the hours?",
+        id: 11, title: "You are tasked with keeping watch over a slumbering party member who is fighting off a strange, magical fever. How do you pass the hours?",
         options: [
           { text: "Maintain a rigorous physical routine—pacing the campsite boundary, checking the perimeter, and keeping your gear polished.", scores: { Gryffon: 2 } },
           { text: "Monitor their vitals closely, taking notes on the progression of symptoms, testing remedies, and searching your memory for a cure.", scores: { Spynx: 2 } },
@@ -349,7 +349,7 @@
         ]
       },
       {
-        id: 12, title: "The Rusted Chest: Your party discovers a heavy, rusted iron chest buried beneath a waterfall. It has no keyhole. How do you propose opening it?",
+        id: 12, title: "Your party discovers a heavy, rusted iron chest buried beneath a waterfall. It has no keyhole. How do you propose opening it?",
         options: [
           { text: "Fetch a heavy sledgehammer or crowbar and use leveraged physical force to break the rusted latches open.", scores: { Gryffon: 2 } },
           { text: "Examine the seams with an artisan's lens, looking for hidden magnetic catches, internal pins, or chemical points of failure.", scores: { Spynx: 2 } },
@@ -358,7 +358,7 @@
         ]
       },
       {
-        id: 13, title: "The Masquerade Target Goal (Goals): When the floating city of The Masquerade stops at K.A.M.P. at the end of the year, how do you plan to make your mark?",
+        id: 13, title: "When the floating city of The Masquerade stops at K.A.M.P. at the end of the year, how do you plan to make your mark?",
         options: [
           { text: "Lead K.A.M.P. to victory in the Great Colosseum combat games or the Zyng league finals.", scores: { Gryffon: 2 } },
           { text: "Unveil a groundbreaking alchemical discovery, new magic-tech invention, or theoretical paper that astounds the judges.", scores: { Spynx: 2 } },
@@ -367,7 +367,7 @@
         ]
       },
       {
-        id: 14, title: "The Collapsing Bridge: During a tactical retreat, a bridge behind your group begins to collapse. How do you ensure everyone makes it across safely?",
+        id: 14, title: "During a tactical retreat, a bridge behind your group begins to collapse. How do you ensure everyone makes it across safely?",
         options: [
           { text: "Take up a defensive stance at the far end, physically hauling struggling allies across and standing firm until the last person crosses.", scores: { Gryffon: 2 } },
           { text: "Instantly calculate the bridge's remaining structural load and direct allies to step only on specific weight-bearing beams.", scores: { Spynx: 2, Gryffon: 1 } },
@@ -376,7 +376,7 @@
         ]
       },
       {
-        id: 15, title: "Wasteland Survival: Your group is stranded in an arid wasteland with limited water. How do you approach the resource crisis?",
+        id: 15, title: "Your group is stranded in an arid wasteland with limited water. How do you approach the resource crisis?",
         options: [
           { text: "Enforce strict daily rationing, taking the smallest share yourself to keep the group's primary combatants at peak strength.", scores: { Gryffon: 2 } },
           { text: "Construct a makeshift solar still or condensation trap using available gear and basic environmental principles.", scores: { Spynx: 2 } },
@@ -385,7 +385,7 @@
         ]
       },
       {
-        id: 16, title: "Preferred Campus Duty (Lifestyle): All K.A.M.P. students contribute to running the academy estate. Which daily operational duty appeals to you most?",
+        id: 16, title: "All K.A.M.P. students contribute to running the academy estate. Which daily operational duty appeals to you most?",
         options: [
           { text: "Joining perimeter patrols, hunting, and foraging in the forest for the dining hall.", scores: { Gryffon: 2 } },
           { text: "Assisting as a lab tech in alchemy or cataloging rare scrolls in the tower library.", scores: { Spynx: 2 } },
@@ -394,7 +394,7 @@
         ]
       },
       {
-        id: 17, title: "The Noble Duel: In a formal duel with an arrogant noble, they offer you the choice of terms. What do you choose?",
+        id: 17, title: "In a formal duel with an arrogant noble, they offer you the choice of terms. What do you choose?",
         options: [
           { text: "A straightforward test of martial skill—standard weapons, clear boundaries, and victory by yield or knockout.", scores: { Gryffon: 2 } },
           { text: "A contest of tactical wits, such as a timed obstacle course, an intricate game of strategy, or a technical riddle.", scores: { Spynx: 2, Gryffon: 1 } },
@@ -403,7 +403,7 @@
         ]
       },
       {
-        id: 18, title: "Heist Role: Which role do you prefer to take when your team is planning a covert heist?",
+        id: 18, title: "Which role do you prefer to take when your team is planning a covert heist?",
         options: [
           { text: "The Enforcer / Overwatch: Standing guard at the entry point, ready to handle guards or cover the escape.", scores: { Gryffon: 2 } },
           { text: "The Infiltrator / Mastermind: Mapping out guard schedules, bypass routes, and security mechanisms in advance.", scores: { Spynx: 2 } },
@@ -412,7 +412,7 @@
         ]
       },
       {
-        id: 19, title: "The Glowing Seed: You find a strange, glowing seed buried in the dirt. How do you care for it?",
+        id: 19, title: "You find a strange, glowing seed buried in the dirt. How do you care for it?",
         options: [
           { text: "Clear a safe patch of ground, build a small fence around it, and guard it against local pests and weeds.", scores: { Gryffon: 2 } },
           { text: "Test the soil's acidity, measure light exposure, and carefully track its growth rate in a journal.", scores: { Spynx: 2 } },
@@ -421,7 +421,7 @@
         ]
       },
       {
-        id: 20, title: "Pushing Past Exhaustion: What drives your character to keep pushing forward when they are completely exhausted?",
+        id: 20, title: "What drives your character to keep pushing forward when they are completely exhausted?",
         options: [
           { text: "Unyielding duty to their companions and the refusal to let down those who rely on their strength.", scores: { Gryffon: 2 } },
           { text: "An insatiable curiosity to see what lies past the horizon and solve the next great mystery.", scores: { Spynx: 2 } },
