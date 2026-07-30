@@ -578,7 +578,7 @@
     }
 
     function sendToGoogleSheet(primaryPath, secondaryPath) {
-      if (!GOOGLE_SHEET_SCRIPT_URL || GOOGLE_SHEET_SCRIPT_URL === "https://script.google.com/macros/s/AKfycbwx1xjpqKK0o0TWcrd5FjfdZLlhttLlwc3QZZIkeZ6CPVYkSAUah9Vvb0Y3TrOChFtEFQ/exec") return;
+      if (!GOOGLE_SHEET_SCRIPT_URL || GOOGLE_SHEET_SCRIPT_URL) return;
 
       const formattedScores = Object.entries(pathScores)
         .filter(([path, pts]) => pts > 0)
