@@ -578,7 +578,8 @@
     }
 
     function sendToGoogleSheet(primaryPath, secondaryPath) {
-      if (!GOOGLE_SHEET_SCRIPT_URL || GOOGLE_SHEET_SCRIPT_URL) return;
+      // ONLY abort if the URL is completely empty
+      if (!GOOGLE_SHEET_SCRIPT_URL) return;
 
       const formattedScores = Object.entries(pathScores)
         .filter(([path, pts]) => pts > 0)
