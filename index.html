@@ -36,17 +36,14 @@
       --table-cream: #f4eee0;
     }
 
-    body {
+body {
       margin: 0;
-      padding: 0;
+      padding: 40px 0; /* Replaces flexbox to give breathing room at the top */
       font-family: 'Belleza', sans-serif;
       /* Original Space Background for the page */
       background: var(--space-dark) url('https://i.imgur.com/rbA1bPE.png') no-repeat center center fixed;
       background-size: cover;
       min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
     }
 
     * { box-sizing: border-box; }
@@ -700,13 +697,16 @@
       sendToGoogleSheet(primaryPath, secondaryPath);
     }
 
-    function downloadPDF() {
+function downloadPDF() {
+      // Force the window to scroll to the very top to prevent offset glitches
+      window.scrollTo(0, 0);
+
       const element = document.getElementById('dossier');
       const opt = {
         margin:       0.5,
         filename:     `${studentName.replace(/\s+/g, '_')}_KAMP_Schedule.pdf`,
         image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, backgroundColor: null }, // Allows background transparency to let parchment through, or defaults to white if needed.
+        html2canvas:  { scale: 2, backgroundColor: null, scrollY: 0 }, // Added scrollY: 0
         jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
       };
       html2pdf().set(opt).from(element).save();
