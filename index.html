@@ -8,10 +8,10 @@
   <!-- html2pdf for PDF generation -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
-  <!-- Google Fonts: Belleza for headers, Exo 2 as a fallback -->
+  <!-- Google Fonts: Belleza for headers, Exo 2 & Press Start 2P for footers/fallbacks -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Belleza&family=Exo+2:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Belleza&family=Exo+2:wght@400;600&family=Press+Start+2P&display=swap" rel="stylesheet">
 
   <style>
     @font-face {
@@ -31,16 +31,15 @@
       --kamp-dark-teal: #03444e;
       --space-dark: #020205;
       
-      /* Table Colors based on image_0fe454.png */
+      /* Table Colors */
       --table-green: #9fb396; 
       --table-cream: #f4eee0;
     }
 
-body {
+    body {
       margin: 0;
-      padding: 40px 0; /* Replaces flexbox to give breathing room at the top */
+      padding: 40px 0; /* Prevents flexbox scroll height bugs in PDF export */
       font-family: 'Belleza', sans-serif;
-      /* Original Space Background for the page */
       background: var(--space-dark) url('https://i.imgur.com/rbA1bPE.png') no-repeat center center fixed;
       background-size: cover;
       min-height: 100vh;
@@ -52,7 +51,7 @@ body {
     .app-container {
       width: 90%;
       max-width: 800px;
-      margin: 40px auto;
+      margin: 0 auto;
       background: url('https://i.imgur.com/ipirojq.png') no-repeat center center;
       background-size: cover;
       border: 2px solid var(--kamp-gold);
@@ -103,14 +102,14 @@ body {
       background: rgba(255, 255, 255, 0.5);
     }
     .inline-input::placeholder {
-      color: rgba(84, 1, 98, 0.5); /* Faded purple */
+      color: rgba(84, 1, 98, 0.5);
       font-weight: normal;
     }
 
     .house-desc {
       margin: 20px 0;
       padding: 15px;
-      background: rgba(13, 148, 136, 0.15); /* Teal tint */
+      background: rgba(13, 148, 136, 0.15);
       border-left: 4px solid var(--kamp-purple);
       border-radius: 0 4px 4px 0;
     }
@@ -132,7 +131,7 @@ body {
       background: var(--kamp-purple);
       color: var(--kamp-lavender);
       border-color: var(--kamp-lavender);
-      box-shadow: 0 0 15px rgba(212, 175, 55, 0.4); /* Gold glow */
+      box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
     }
 
     /* Quiz Styling */
@@ -182,9 +181,9 @@ body {
       box-shadow: inset 0 0 10px rgba(84, 1, 98, 0.1);
     }
 
-    /* Clean Dossier / Schedule Table */
+    /* Schedule Table */
     #dossier {
-      padding: 10px 0 30px 0;
+      padding: 10px 0 10px 0;
     }
 
     .schedule-table {
@@ -194,7 +193,7 @@ body {
       font-size: 1rem;
       color: var(--kamp-dark);
       border: 2px solid var(--kamp-dark-teal);
-      margin-bottom: 20px;
+      margin-bottom: 15px;
     }
 
     .schedule-table td {
@@ -202,7 +201,6 @@ body {
       border: 1px solid rgba(0,0,0,0.1);
     }
 
-    /* Alternating row styling inspired by image_0fe454.png */
     .schedule-row:nth-child(odd) {
       background-color: var(--table-green);
     }
@@ -220,6 +218,51 @@ body {
       font-size: 1.1rem;
       text-align: center;
       border: 2px solid var(--kamp-dark-teal);
+    }
+
+    /* Social Footer for Site Report */
+    .social-footer {
+      margin-top: 30px;
+      text-align: center;
+      border-top: 2px solid var(--kamp-gold);
+      padding-top: 20px;
+    }
+    
+    .social-footer-title {
+      color: var(--kamp-purple);
+      font-family: 'Belleza', serif;
+      font-size: 1.3rem;
+      font-weight: bold;
+      letter-spacing: 1px;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+    }
+
+    .social-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .social-grid a {
+      color: var(--kamp-dark-teal);
+      text-decoration: none;
+      font-family: 'EuroStyle', 'Exo 2', sans-serif;
+      font-size: 0.85rem;
+      font-weight: bold;
+      padding: 8px 14px;
+      background: rgba(255, 255, 255, 0.5);
+      border: 1px solid var(--kamp-dark-teal);
+      border-radius: 4px;
+      transition: all 0.2s ease;
+    }
+
+    .social-grid a:hover {
+      background: var(--kamp-purple);
+      color: var(--kamp-gold);
+      border-color: var(--kamp-gold);
+      transform: translateY(-2px);
     }
 
     .hidden { display: none; }
@@ -274,6 +317,21 @@ body {
     <div id="step-result" class="hidden">
       <div id="dossier"></div>
       <button class="btn" onclick="downloadPDF()">PRINT OFFICIAL SCHEDULE (PDF)</button>
+
+      <!-- Establish Comms / Social Links Footer -->
+      <div class="social-footer">
+        <div class="social-footer-title">Establish Comms with GMoD</div>
+        <div class="social-grid">
+          <a href="https://gamemasterondemand.com/" target="_blank">Website</a>
+          <a href="https://startplaying.games/gm/gmdrake" target="_blank">StartPlaying</a>
+          <a href="https://www.patreon.com/gamemasterondemand" target="_blank">Patreon</a>
+          <a href="https://bsky.app/profile/gamemasterondemand.com" target="_blank">BlueSky</a>
+          <a href="https://www.facebook.com/GameMasterOnDemand/" target="_blank">Facebook</a>
+          <a href="https://www.instagram.com/gamemasterondemand" target="_blank">Instagram</a>
+          <a href="https://www.youtube.com/channel/UCVy9eGh38eLFWkoEgSPHzMA" target="_blank">YouTube</a>
+          <a href="mailto:Hello@gamemasterondemand.com">Email</a>
+        </div>
+      </div>
     </div>
 
   </div>
@@ -566,7 +624,6 @@ body {
     }
 
     function getAdvisor(primary) {
-      // Logic from rubric
       if (primary === "Gryffon") return "Commander Lysander Lyteheart (Games Mistress / Valkyrie)";
       if (primary === "Spynx") return "Aukymba (Head of Life Science) or Prof. Yvctus (Tactician Master)";
       if (primary === "Hydra") return "Lady Byon (Head of Arcane Arts) or Tao (Guru of Faith)";
@@ -575,7 +632,6 @@ body {
     }
 
     function sendToGoogleSheet(primaryPath, secondaryPath) {
-      // ONLY abort if the URL is completely empty
       if (!GOOGLE_SHEET_SCRIPT_URL) return;
 
       const formattedScores = Object.entries(pathScores)
@@ -683,10 +739,13 @@ body {
           </tr>
         </table>
 
-        <div style="margin-top:20px; font-weight:bold; text-align:center; font-family:'EuroStyle', 'Exo 2', sans-serif;">
+        <div style="margin-top:15px; font-weight:bold; text-align:center; font-family:'EuroStyle', 'Exo 2', sans-serif;">
           KAMP KODEX ISSUED: [X] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; BLOOD-BOUND SEAL: [X]<br>
-          <span style="font-size:0.9rem; font-style:italic; font-family:'Belleza', sans-serif; color:var(--kamp-purple); display:block; margin-top:10px;">
+          <span style="font-size:0.9rem; font-style:italic; font-family:'Belleza', sans-serif; color:var(--kamp-purple); display:block; margin-top:6px;">
             Approved by: Headmistress Kanyssa Applebaum & Headmistrex Syster Satisfaction
+          </span>
+          <span style="font-size:0.8rem; letter-spacing:1px; color:var(--kamp-dark-teal); display:block; margin-top:8px;">
+            https://gamemasterondemand.com/
           </span>
         </div>
       `;
@@ -697,16 +756,16 @@ body {
       sendToGoogleSheet(primaryPath, secondaryPath);
     }
 
-function downloadPDF() {
-      // Force the window to scroll to the very top to prevent offset glitches
+    function downloadPDF() {
+      // Force scroll to top to prevent vertical clipping/offsets in html2pdf
       window.scrollTo(0, 0);
 
       const element = document.getElementById('dossier');
       const opt = {
-        margin:       0.5,
+        margin:       0.4,
         filename:     `${studentName.replace(/\s+/g, '_')}_KAMP_Schedule.pdf`,
         image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, backgroundColor: null, scrollY: 0 }, // Added scrollY: 0
+        html2canvas:  { scale: 2, backgroundColor: null, scrollY: 0 },
         jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
       };
       html2pdf().set(opt).from(element).save();
