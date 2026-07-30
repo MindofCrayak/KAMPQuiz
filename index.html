@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>K.A.M.P. First-Year Registration & Sorting</title>
+  
+  <!-- html2pdf for PDF generation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <!-- KAMP Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Belleza&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --kamp-green: #1a472a;
+      --kamp-gold: #c5a059;
+      --kamp-dark: #111111;
+      --parchment-bg: rgba(244, 238, 224, 0.92);
+      --ink: #2c2c2c;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Belleza', sans-serif;
+      /* Green Parchment Background */
+      background: url('https://i.imgur.com/ipirojq.png') no-repeat center center fixed;
+      background-size: cover;
+      color: var(--ink);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    * { box-sizing: border-box; }
+
+    .app-container {
+      width: 90%;
+      max-width: 800px;
+      margin: 40px auto;
+      background: var(--parchment-bg);
+      border: 2px solid var(--kamp-gold);
+      border-radius: 8px;
+      padding: 40px;
+      position: relative;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .kamp-logo {
+      display: block;
+      max-width: 200px;
+      margin: 0 auto 20px auto;
+    }
+
+    h1.title {
+      color: var(--kamp-green);
+      text-align: center;
+      font-size: 2.5rem;
+      margin: 10px 0;
+      border-bottom: 2px solid var(--kamp-gold);
+      padding-bottom: 10px;
+    }
+
+    .letter-content {
+      font-size: 1.2rem;
+      line-height: 1.6;
+      margin-bottom: 30px;
+    }
+
+    .inline-input {
+      background: transparent;
+      border: none;
+      border-bottom: 2px dashed var(--kamp-gold);
+      font-family: 'Belleza', sans-serif;
+      font-size: 1.2rem;
+      color: var(--kamp-green);
+      text-align: center;
+      width: 200px;
+      outline: none;
+    }
+    .inline-input:focus {
+      border-bottom: 2px solid var(--kamp-green);
+    }
+
+    .house-desc {
+      margin: 20px 0;
+      padding: 15px;
+      background: rgba(26, 71, 42, 0.05);
+      border-left: 4px solid var(--kamp-gold);
+    }
+
+    .btn {
+      background: var(--kamp-green);
+      color: #fff;
+      font-family: 'Belleza', sans-serif;
+      font-size: 1.2rem;
+      padding: 12px 24px;
+      border: 2px solid var(--kamp-gold);
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+      transition: all 0.2s ease;
+      margin-top: 15px;
+    }
+    .btn:hover {
+      background: #11331c;
+      box-shadow: 0 0 10px rgba(197, 160, 89, 0.5);
+    }
+
+    /* Quiz Styling */
+    .progress-bar-bg {
+      background: rgba(26, 71, 42, 0.2);
+      border-radius: 4px;
+      height: 10px;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+    .progress-bar-fill {
+      background: var(--kamp-green);
+      height: 100%;
+      width: 0%;
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+
+    .question-title {
+      font-size: 1.4rem;
+      color: var(--kamp-green);
+      margin-bottom: 20px;
+      line-height: 1.5;
+      font-weight: bold;
+    }
+
+    .option-btn {
+      display: block;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.5);
+      border: 1px solid var(--kamp-gold);
+      color: var(--ink);
+      padding: 14px 18px;
+      margin-bottom: 12px;
+      border-radius: 4px;
+      text-align: left;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: 'Belleza', sans-serif;
+    }
+    .option-btn:hover {
+      background: rgba(197, 160, 89, 0.2);
+      border-color: var(--kamp-green);
+      transform: translateX(4px);
+    }
+
+    /* Schedule View */
+    #dossier {
+      background: #fdfbf7;
+      border: 2px solid var(--ink);
+      padding: 30px;
+      color: var(--ink);
+      font-family: monospace; /* For schedule alignment */
+      font-size: 1rem;
+      white-space: pre-wrap; /* Preserves formatting */
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    <img src="https://i.imgur.com/jYVn7hK.png" alt="KAMP Logo" class="kamp-logo">
+
+    <!-- Step 1: Acceptance Letter -->
+    <div id="step-intro">
+      <h1 class="title">Official Letter of Acceptance</h1>
+      <div class="letter-content">
+        <p>Dear <input type="text" id="playerName" class="inline-input" placeholder="Parent/Guardian Name">,</p>
+        <p>The Konran Academy of Might & Proficiency (K.A.M.P.) is pleased to inform you that your ward, <input type="text" id="charName" class="inline-input" placeholder="Student Name">, has been accepted for the upcoming academic term[cite: 1].</p>
+        <p>Before arriving on campus, all incoming students must complete the Student Intake & Aspirations Questionnaire. This evaluation will determine their Primary Path and assign them to one of our esteemed faculty advisors[cite: 1].</p>
+        
+        <div class="house-desc">
+          <strong>The Four Paths of K.A.M.P:</strong><br>
+          • <strong>Gryffon:</strong> The path of martial prowess, tactical combat, physical conditioning, and unwavering duty[cite: 1].<br>
+          • <strong>Spynx:</strong> The path of alchemy, research, logic, and profound technical understanding[cite: 1].<br>
+          • <strong>Hydra:</strong> The path of the arcane arts, life science, mental discipline, and planar magic[cite: 1].<br>
+          • <strong>Unycorn:</strong> The path of performance, music, roguish arts, chance, and magnificent unpredictability[cite: 1].
+        </div>
+
+        <p>Please ensure the questionnaire is completed with absolute honesty.</p>
+        <p><em>— Headmistress Kanyssa Applebaum & Headmistrex Syster Satisfaction</em>[cite: 1]</p>
+      </div>
+      <button class="btn" onclick="startQuiz()">COMMENCE EVALUATION</button>
+    </div>
+
+    <!-- Step 2: Interactive Quiz -->
+    <div id="step-quiz" class="hidden">
+      <div style="font-size: 0.9rem; color: var(--kamp-green); margin-bottom: 10px;" id="question-count">QUESTION 1 OF 20</div>
+      <div class="progress-bar-bg">
+        <div id="progress-fill" class="progress-bar-fill"></div>
+      </div>
+      
+      <div id="question-text" class="question-title"></div>
+      <div id="options-container"></div>
+    </div>
+
+    <!-- Step 3: Tie-Breaker -->
+    <div id="step-tiebreaker" class="hidden">
+      <h2 class="title">A Crossroads of Potential</h2>
+      <p style="text-align: center; margin-bottom: 20px;">Your aptitude is evenly split. Choose the path that calls to you most.</p>
+      <div id="tiebreaker-options"></div>
+    </div>
+
+    <!-- Step 4: Result / Schedule -->
+    <div id="step-result" class="hidden">
+      <div id="dossier"></div>
+      <button class="btn" onclick="downloadPDF()">PRINT OFFICIAL SCHEDULE (PDF)</button>
+    </div>
+
+  </div>
+
+  <script>
+    // Data Structure combining the Questions and the Master Scoring Rubric[cite: 1]
+    const QUESTIONS = [
+      {
+        id: 1, title: "The Descending Ceiling: You are trapped in a room with a rapidly descending ceiling. What is your immediate instinct?",
+        options: [
+          { text: "Find a sturdy pillar or brace yourself beneath a structural beam to physically stall the trap while others look for an exit.", scores: { Gryffon: 2, Hydra: 1 } },
+          { text: "Look for the pressure plate, gear mechanism, or counterweight system controlling the ceiling and attempt to disable it.", scores: { Spynx: 2 } },
+          { text: "Close your eyes, calm your heart rate, and focus your energy on creating an invisible barrier or finding a spatial gap to shelter the group.", scores: { Hydra: 2, Spynx: 1 } },
+          { text: "Jam an iron spike or weapon into the gear track, cracking a joke to keep everyone from panicking while you scan for a hidden escape hatch.", scores: { Unycorn: 2, Gryffon: 1 } }
+        ]
+      },
+      {
+        id: 2, title: "The Dream Career Title (Aspirations): When you eventually graduate from K.A.M.P., what professional title do you hope to carry into the world?",
+        options: [
+          { text: "Commander of the Perimeter Guard / Field War Strategist", scores: { Gryffon: 2 } },
+          { text: "Master Alchemist / Chief Research Officer", scores: { Spynx: 2 } },
+          { text: "High Archmage / Master Psion", scores: { Hydra: 2 } },
+          { text: "Masquerade Primadonna / Grand Entertainer", scores: { Unycorn: 2 } }
+        ]
+      },
+      {
+        id: 3, title: "Handling a Reckless Mistake: A companion makes a reckless mistake that almost gets the party caught. How do you handle it afterward?",
+        options: [
+          { text: "Put them through a rigorous drill or scenario exercise so muscle memory prevents them from failing under pressure again.", scores: { Gryffon: 2 } },
+          { text: "Sit down with them to break down the timeline of events, pointing out exactly where their logic broke down so they learn from it.", scores: { Spynx: 2, Gryffon: 1 } },
+          { text: "Remind them that losing emotional control invites disaster, teaching them breathing or grounding techniques to maintain composure.", scores: { Hydra: 2 } },
+          { text: "Reframe the failure as a funny learning experience, buy them a drink, and quietly show them a slick trick to avoid getting caught next time.", scores: { Unycorn: 2 } }
+        ]
+      },
+      {
+        id: 4, title: "Extracurricular Campus Clubs (Clubs): Which student organization or campus club catches your eye for your off-hours?",
+        options: [
+          { text: "The Tactical Gaming & Strategy Club (Sponsored by Prof. Yvctus)", scores: { Gryffon: 1, Spynx: 1 } },
+          { text: "The Botanical Alchemy & Gardening Club (Sponsored by Sympkin Sylverflask)", scores: { Spynx: 1, Hydra: 1 } },
+          { text: "The Student Government & Chance Society (Sponsored by Shade)", scores: { Unycorn: 1, Hydra: 1 } },
+          { text: "The Arena & Zyng Athletic League (Sponsored by Commander Lysander)", scores: { Gryffon: 1, Unycorn: 1 } }
+        ]
+      },
+      {
+        id: 5, title: "Forest Campsite Setup: You are tasked with preparing a campsite in an unfamiliar, dangerous forest. What task do you claim?",
+        options: [
+          { text: "Setting up watch rotations, clearing sightlines around the camp, and fortifying the immediate perimeter.", scores: { Gryffon: 2 } },
+          { text: "Identifying local flora and water sources, testing the soil for contaminants, and noting weather shifts.", scores: { Spynx: 2 } },
+          { text: "Establishing a quiet circle away from camp noise to meditate, attune to the surrounding environment, and set alarms.", scores: { Hydra: 2, Spynx: 1 } },
+          { text: "Setting up a comfortable hearth, preparing a surprisingly good meal from gathered rations, and keeping spirits high.", scores: { Unycorn: 2 } }
+        ]
+      },
+      {
+        id: 6, title: "Specialized Elective Major (Electives): Outside your core general studies, which practical application class do you most want to add to your schedule?",
+        options: [
+          { text: "Advanced Armorsmithing, Weapon Forging & Tactical Combat", scores: { Gryffon: 2 } },
+          { text: "Ancient History, Cryptography & Lost Sciences", scores: { Spynx: 2 } },
+          { text: "Environmental Meditation, Reagent Harvesting & Planar Magic", scores: { Hydra: 2 } },
+          { text: "Stage Production, Costume Weaving, Music & Performance", scores: { Unycorn: 2 } }
+        ]
+      },
+      {
+        id: 7, title: "Preferred Tools: What kind of weapon or tool feels most natural in your character's hands?",
+        options: [
+          { text: "A well-balanced, reliable weapon or shield that requires practiced footwork and physical conditioning to master.", scores: { Gryffon: 2 } },
+          { text: "A finely tuned instrument, intricate toolkit, or complex apparatus that requires technical understanding to operate.", scores: { Spynx: 2 } },
+          { text: "A catalyst, focus, or mental discipline that allows you to channel force directly through your own intent and willpower.", scores: { Hydra: 2 } },
+          { text: "A versatile, lightweight blade or performance piece that allows for fluid movement, speed, and unpredictable flourishes.", scores: { Unycorn: 2, Gryffon: 1 } }
+        ]
+      },
+      {
+        id: 8, title: "Personal Insults: Which phrase feels most like an insult to your character?",
+        options: [
+          { text: "\"You hesitated when it mattered most.\"", scores: { Gryffon: 2 } },
+          { text: "\"You don't know what you're talking about.\"", scores: { Spynx: 2 } },
+          { text: "\"You lost control and let your impulses take over.\"", scores: { Hydra: 2 } },
+          { text: "\"You're boring, forgettable, and uninspired.\"", scores: { Unycorn: 2 } }
+        ]
+      },
+      {
+        id: 9, title: "Free Term Days: You are given a week off from classes and duties at K.A.M.P. How do you spend it?",
+        options: [
+          { text: "Training in the arena, refining your movement, or organizing a tactical exercise with fellow students.", scores: { Gryffon: 2, Unycorn: 1 } },
+          { text: "Locking yourself in the quietest corner of the tower library or alchemical lab pursuing an independent research project.", scores: { Spynx: 2 } },
+          { text: "Spending time alone in nature or a quiet sanctuary, practicing meditation and expanding your mental boundaries.", scores: { Hydra: 2 } },
+          { text: "Exploring hidden corners of campus, organizing an impromptu celebration, or collaborating on a creative project.", scores: { Unycorn: 2 } }
+        ]
+      },
+      {
+        id: 10, title: "Superior Opponents: When facing a rival who is clearly more skilled than you, what is your strategy?",
+        options: [
+          { text: "Endure their onslaught, study their pattern, and strike decisively when their stamina or guard falters.", scores: { Gryffon: 2, Hydra: 1 } },
+          { text: "Analyze their technique, identify their mechanical or tactical blind spot, and exploit it with mathematical precision.", scores: { Spynx: 2, Gryffon: 1 } },
+          { text: "Stay calm, refuse to let their intimidation affect your mind, and force them to make an error out of frustration.", scores: { Hydra: 2 } },
+          { text: "Change the rules of engagement, use misdirection or flair to throw them off balance, and win by being unpredictable.", scores: { Unycorn: 2 } }
+        ]
+      },
+      {
+        id: 11, title: "The Fever Watch: You are tasked with keeping watch over a slumbering party member who is fighting off a strange, magical fever. How do you pass the hours?",
+        options: [
+          { text: "Maintain a rigorous physical routine—pacing the campsite boundary, checking the perimeter, and keeping your gear polished.", scores: { Gryffon: 2 } },
+          { text: "Monitor their vitals closely, taking notes on the progression of symptoms, testing remedies, and searching your memory for a cure.", scores: { Spynx: 2 } },
+          { text: "Sit beside them in quiet concentration, channeling steady, calming energy or keeping your mind focused to ward off intrusive mental influences.", scores: { Hydra: 2, Spynx: 1 } },
+          { text: "Talk to them softly, play light music, or tell comforting stories—believing that keeping their spirit happy is the best medicine.", scores: { Unycorn: 2 } }
+        ]
+      },
+      {
+        id: 12, title: "The Rusted Chest: Your party discovers a heavy, rusted iron chest buried beneath a waterfall. It has no keyhole. How do you propose opening it?",
+        options: [
+          { text: "Fetch a heavy sledgehammer or crowbar and use leveraged physical force to break the rusted latches open.", scores: { Gryffon: 2 } },
+          { text: "Examine the seams with an artisan's lens, looking for hidden magnetic catches, internal pins, or chemical points of failure.", scores: { Spynx: 2 } },
+          { text: "Focus your senses on the chest's interior to feel if the contents are volatile or fragile before applying a targeted force.", scores: { Hydra: 2, Spynx: 1 } },
+          { text: "Use a delicate touch, a slender piece of wire, or trick the mechanism into releasing by manipulating its balance.", scores: { Unycorn: 2, Gryffon: 1 } }
+        ]
+      },
+      {
+        id: 13, title: "The Masquerade Target Goal (Goals): When the floating city of The Masquerade stops at K.A.M.P. at the end of the year, how do you plan to make your mark?",
+        options: [
+          { text: "Lead K.A.M.P. to victory in the Great Colosseum combat games or the Zyng league finals.", scores: { Gryffon: 2 } },
+          { text: "Unveil a groundbreaking alchemical discovery, new magic-tech invention, or theoretical paper that astounds the judges.", scores: { Spynx: 2 } },
+          { text: "Master an extraordinary tier of magical or psionic power that reshapes reality in front of the grand judges.", scores: { Hydra: 2 } },
+          { text: "Perform on the grand stage, steal the spotlight as Primadonna, or dazzle the crowds with sheer artistic splendor.", scores: { Unycorn: 2 } }
+        ]
+      },
+      {
+        id: 14, title: "The Collapsing Bridge: During a tactical retreat, a bridge behind your group begins to collapse. How do you ensure everyone makes it across safely?",
+        options: [
+          { text: "Take up a defensive stance at the far end, physically hauling struggling allies across and standing firm until the last person crosses.", scores: { Gryffon: 2 } },
+          { text: "Instantly calculate the bridge's remaining structural load and direct allies to step only on specific weight-bearing beams.", scores: { Spynx: 2, Gryffon: 1 } },
+          { text: "Use a pulse of mental or physical energy to temporarily stabilize the crumbling stones or anchor a falling ally mid-air.", scores: { Hydra: 2 } },
+          { text: "Distract whatever is chasing you with a sudden flash of light or noise, then vault across with athletic flair to drop a rope.", scores: { Unycorn: 2 } }
+        ]
+      },
+      {
+        id: 15, title: "Wasteland Survival: Your group is stranded in an arid wasteland with limited water. How do you approach the resource crisis?",
+        options: [
+          { text: "Enforce strict daily rationing, taking the smallest share yourself to keep the group's primary combatants at peak strength.", scores: { Gryffon: 2 } },
+          { text: "Construct a makeshift solar still or condensation trap using available gear and basic environmental principles.", scores: { Spynx: 2 } },
+          { text: "Guide the group through energy-conserving movement, minimizing physical strain and maintaining mental discipline over thirst.", scores: { Hydra: 2 } },
+          { text: "Search for indicator plants, follow desert wildlife patterns, or turn the search into an optimistic game to keep panic at bay.", scores: { Unycorn: 2, Spynx: 1 } }
+        ]
+      },
+      {
+        id: 16, title: "Preferred Campus Duty (Lifestyle): All K.A.M.P. students contribute to running the academy estate. Which daily operational duty appeals to you most?",
+        options: [
+          { text: "Joining perimeter patrols, hunting, and foraging in the forest for the dining hall.", scores: { Gryffon: 2 } },
+          { text: "Assisting as a lab tech in alchemy or cataloging rare scrolls in the tower library.", scores: { Spynx: 2 } },
+          { text: "Tending to magical flora in the greenhouses and foraging volatile reagents.", scores: { Hydra: 2 } },
+          { text: "Staging campus events, decorating quarters, and handling campus aesthetic cleanup.", scores: { Unycorn: 2 } }
+        ]
+      },
+      {
+        id: 17, title: "The Noble Duel: In a formal duel with an arrogant noble, they offer you the choice of terms. What do you choose?",
+        options: [
+          { text: "A straightforward test of martial skill—standard weapons, clear boundaries, and victory by yield or knockout.", scores: { Gryffon: 2 } },
+          { text: "A contest of tactical wits, such as a timed obstacle course, an intricate game of strategy, or a technical riddle.", scores: { Spynx: 2, Gryffon: 1 } },
+          { text: "A test of endurance and focus where raw impulse and anger will cause immediate failure.", scores: { Hydra: 2 } },
+          { text: "A spectacle! A duel fought on a raised narrow beam or performing stage where style and crowd favor matter as much as hitting the target.", scores: { Unycorn: 2 } }
+        ]
+      },
+      {
+        id: 18, title: "Heist Role: Which role do you prefer to take when your team is planning a covert heist?",
+        options: [
+          { text: "The Enforcer / Overwatch: Standing guard at the entry point, ready to handle guards or cover the escape.", scores: { Gryffon: 2 } },
+          { text: "The Infiltrator / Mastermind: Mapping out guard schedules, bypass routes, and security mechanisms in advance.", scores: { Spynx: 2 } },
+          { text: "The Anchor: Maintaining a silent mental connection or monitoring the security perimeter for unseen magical wards.", scores: { Hydra: 2 } },
+          { text: "The Distraction / Face: Walking right up to the front gate in a grand costume, drawing every eye in the room to buy your team time.", scores: { Unycorn: 2 } }
+        ]
+      },
+      {
+        id: 19, title: "The Glowing Seed: You find a strange, glowing seed buried in the dirt. How do you care for it?",
+        options: [
+          { text: "Clear a safe patch of ground, build a small fence around it, and guard it against local pests and weeds.", scores: { Gryffon: 2 } },
+          { text: "Test the soil's acidity, measure light exposure, and carefully track its growth rate in a journal.", scores: { Spynx: 2 } },
+          { text: "Plant it in the greenhouse, channeling subtle life-energy and mental focus into the roots to nurture its potential.", scores: { Hydra: 2, Spynx: 1 } },
+          { text: "Decorate its planter with colorful stones and mosaic glass, eager to see what beautiful bloom or strange fruit it yields.", scores: { Unycorn: 2 } }
+        ]
+      },
+      {
+        id: 20, title: "Pushing Past Exhaustion: What drives your character to keep pushing forward when they are completely exhausted?",
+        options: [
+          { text: "Unyielding duty to their companions and the refusal to let down those who rely on their strength.", scores: { Gryffon: 2 } },
+          { text: "An insatiable curiosity to see what lies past the horizon and solve the next great mystery.", scores: { Spynx: 2 } },
+          { text: "The pursuit of perfection—knowing that true mastery is forged only when you push past your limits.", scores: { Hydra: 2 } },
+          { text: "The passion for living a life worth telling stories about and inspiring others through great deeds.", scores: { Unycorn: 2 } }
+        ]
+      }
+    ];
+
+    // State Variables
+    let parentName = "";
+    let studentName = "";
+    let currentQ = 0;
+    
+    // Core scores
+    let pathScores = { Gryffon: 0, Spynx: 0, Hydra: 0, Unycorn: 0 };
+    
+    // Saved strings for the schedule[cite: 1]
+    let savedClub = "";
+    let savedElective = "";
+    let savedGoal = "";
+    let savedDuty = "";
+
+    function startQuiz() {
+      parentName = document.getElementById("playerName").value.trim();
+      studentName = document.getElementById("charName").value.trim();
+      
+      if (!parentName || !studentName) {
+        return alert("Please enter both the Parent/Guardian Name and the Student Name!");
+      }
+
+      document.getElementById("step-intro").classList.add("hidden");
+      document.getElementById("step-quiz").classList.remove("hidden");
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      const q = QUESTIONS[currentQ];
+      document.getElementById("question-count").innerText = `QUESTION ${currentQ + 1} OF ${QUESTIONS.length}`;
+      document.getElementById("progress-fill").style.width = `${((currentQ) / QUESTIONS.length) * 100}%`;
+      document.getElementById("question-text").innerText = `${q.id}. ${q.title}`;
+
+      const optsContainer = document.getElementById("options-container");
+      optsContainer.innerHTML = "";
+
+      q.options.forEach((opt) => {
+        const btn = document.createElement("button");
+        btn.className = "option-btn";
+        btn.innerText = opt.text;
+        btn.onclick = () => selectOption(opt.scores, opt.text);
+        optsContainer.appendChild(btn);
+      });
+    }
+
+    function selectOption(ptsData, text) {
+      // Add points
+      for (const [path, points] of Object.entries(ptsData)) {
+        pathScores[path] += points;
+      }
+
+      // Save specific answers for the final schedule[cite: 1]
+      if (currentQ === 3) savedClub = text.split('(')[0].trim();  // Q4
+      if (currentQ === 5) savedElective = text;                   // Q6
+      if (currentQ === 12) savedGoal = text;                      // Q13
+      if (currentQ === 15) savedDuty = text;                      // Q16
+
+      currentQ++;
+      if (currentQ < QUESTIONS.length) {
+        renderQuestion();
+      } else {
+        checkTieBreaker();
+      }
+    }
+
+    function checkTieBreaker() {
+      document.getElementById("step-quiz").classList.add("hidden");
+
+      let maxScore = -1;
+      for (const pts of Object.values(pathScores)) {
+        if (pts > maxScore) maxScore = pts;
+      }
+
+      const tiedTop = Object.keys(pathScores).filter(p => pathScores[p] === maxScore);
+
+      if (tiedTop.length > 1) {
+        const tieContainer = document.getElementById("tiebreaker-options");
+        tieContainer.innerHTML = "";
+
+        tiedTop.forEach(path => {
+          const btn = document.createElement("button");
+          btn.className = "option-btn";
+          btn.style.textAlign = "center";
+          btn.style.fontWeight = "bold";
+          btn.innerText = `I pledge myself to the path of the ${path}`;
+          btn.onclick = () => {
+            pathScores[path] += 1; // Break the tie
+            document.getElementById("step-tiebreaker").classList.add("hidden");
+            generateSchedule();
+          };
+          tieContainer.appendChild(btn);
+        });
+
+        document.getElementById("step-tiebreaker").classList.remove("hidden");
+      } else {
+        generateSchedule();
+      }
+    }
+
+    function getAdvisor(primary) {
+      // Logic from rubric[cite: 1]
+      if (primary === "Gryffon") return "Commander Lysander Lyteheart (Games Mistress / Valkyrie)";
+      if (primary === "Spynx") return "Aukymba (Head of Life Science) or Prof. Yvctus (Tactician Master)";
+      if (primary === "Hydra") return "Lady Byon (Head of Arcane Arts) or Tao (Guru of Faith)";
+      if (primary === "Unycorn") return "Flaryotta (Head of Music) or Shade (Head of Chance/Roguish Arts)";
+      return "TBD";
+    }
+
+    function generateSchedule() {
+      document.getElementById("step-result").classList.remove("hidden");
+
+      // Sort paths by score
+      const sortedPaths = Object.entries(pathScores).sort((a, b) => b[1] - a[1]);
+      const primaryPath = sortedPaths[0][0];
+      const secondaryPath = sortedPaths[1][0];
+      const advisor = getAdvisor(primaryPath);
+
+      // Construct plain text schedule[cite: 1]
+      const scheduleText = `====================================================================
+           KONRAN ACADEMY OF MIGHT & PROFICIENCY (K.A.M.P.)
+                  OFFICIAL FIRST-YEAR REGISTRATION
+====================================================================
+
+STUDENT NAME: ${studentName.toUpperCase()}
+PRIMARY PATH: [ Highest Score: ${primaryPath} ]
+SECONDARY FOCUS: [ Second Highest: ${secondaryPath} ]
+
+--------------------------------------------------------------------
+1. ASSIGNED FACULTY ADVISOR
+--------------------------------------------------------------------
+• ${advisor}
+
+--------------------------------------------------------------------
+2. CORE ADVENTURE TRAINING ACADEMIA (Mandatory First-Year)
+--------------------------------------------------------------------
+[Block 1] Fundamental Physicality & Conditioning (Coach Thrain Ironarm)
+[Block 2] World History, Games & Theory (Professor Yvctus)
+[Block 3] Applied Magic & Mind Fundamentals (Lady Byon & Tao)
+[Block 4] Hearth, Home & Campus Ethics (Syster Servytude / Pryme Kama)
+
+--------------------------------------------------------------------
+3. PATH SPECIALIZATION & ELECTIVE MAJOR
+--------------------------------------------------------------------
+Primary Major: ${savedElective}
+Secondary Elective: [ Focus based on ${secondaryPath} ]
+
+--------------------------------------------------------------------
+4. CAMPUS LIFESTYLE, DUTY & EXTRACURRICULAR CLUB
+--------------------------------------------------------------------
+Campus Operational Duty: ${savedDuty}
+Extracurricular Club:   ${savedClub}
+Masquerade Target Goal:  ${savedGoal}
+
+--------------------------------------------------------------------
+KAMP KODEX ISSUED: [X]               BLOOD-BOUND SEAL: [X]
+APPROVED BY: Headmistress Kanyssa Applebaum & Headmistrex Syster Satisfaction
+====================================================================`;
+
+      document.getElementById("dossier").innerText = scheduleText;
+    }
+
+    function downloadPDF() {
+      const element = document.getElementById('dossier');
+      const opt = {
+        margin:       0.5,
+        filename:     `${studentName.replace(/\s+/g, '_')}_KAMP_Schedule.pdf`,
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2, backgroundColor: '#fdfbf7' },
+        jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+      };
+      html2pdf().set(opt).from(element).save();
+    }
+  </script>
+</body>
+</html>
