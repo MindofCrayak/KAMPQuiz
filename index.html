@@ -17,19 +17,19 @@
     :root {
       --kamp-green: #1a472a;
       --kamp-gold: #c5a059;
-      --kamp-dark: #111111;
-      --parchment-bg: rgba(244, 238, 224, 0.92);
-      --ink: #2c2c2c;
+      --kamp-light-gold: #e8d5a5;
+      --space-dark: #020205;
+      --text-light: #f4eee0;
     }
 
     body {
       margin: 0;
       padding: 0;
       font-family: 'Belleza', sans-serif;
-      /* Green Parchment Background */
-      background: url('https://i.imgur.com/ipirojq.png') no-repeat center center fixed;
+      /* Original Space Background for the page */
+      background: var(--space-dark) url('https://i.imgur.com/rbA1bPE.png') no-repeat center center fixed;
       background-size: cover;
-      color: var(--ink);
+      color: var(--text-light);
       min-height: 100vh;
       display: flex;
       justify-content: center;
@@ -38,68 +38,79 @@
 
     * { box-sizing: border-box; }
 
+    /* Green Parchment Background for the main cell */
     .app-container {
       width: 90%;
       max-width: 800px;
       margin: 40px auto;
-      background: var(--parchment-bg);
+      background: url('https://i.imgur.com/ipirojq.png') no-repeat center center;
+      background-size: cover;
       border: 2px solid var(--kamp-gold);
       border-radius: 8px;
       padding: 40px;
       position: relative;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(0, 0, 0, 0.5);
     }
 
     .kamp-logo {
       display: block;
       max-width: 200px;
       margin: 0 auto 20px auto;
+      filter: drop-shadow(0 0 10px rgba(0,0,0,0.5));
     }
 
     h1.title {
-      color: var(--kamp-green);
+      color: var(--kamp-gold);
       text-align: center;
       font-size: 2.5rem;
       margin: 10px 0;
-      border-bottom: 2px solid var(--kamp-gold);
+      border-bottom: 1px solid var(--kamp-gold);
       padding-bottom: 10px;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
     }
 
     .letter-content {
       font-size: 1.2rem;
       line-height: 1.6;
       margin-bottom: 30px;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
     }
 
     .inline-input {
-      background: transparent;
+      background: rgba(0, 0, 0, 0.2);
       border: none;
       border-bottom: 2px dashed var(--kamp-gold);
       font-family: 'Belleza', sans-serif;
       font-size: 1.2rem;
-      color: var(--kamp-green);
+      color: var(--kamp-light-gold);
       text-align: center;
       width: 200px;
       outline: none;
+      transition: background 0.3s ease;
     }
     .inline-input:focus {
-      border-bottom: 2px solid var(--kamp-green);
+      border-bottom: 2px solid var(--kamp-gold);
+      background: rgba(0, 0, 0, 0.4);
+    }
+    .inline-input::placeholder {
+      color: rgba(232, 213, 165, 0.5);
     }
 
     .house-desc {
       margin: 20px 0;
       padding: 15px;
-      background: rgba(26, 71, 42, 0.05);
+      background: rgba(0, 0, 0, 0.4);
       border-left: 4px solid var(--kamp-gold);
+      border-radius: 0 4px 4px 0;
     }
 
     .btn {
-      background: var(--kamp-green);
-      color: #fff;
+      background: rgba(0, 0, 0, 0.6);
+      color: var(--kamp-gold);
       font-family: 'Belleza', sans-serif;
       font-size: 1.2rem;
       padding: 12px 24px;
-      border: 2px solid var(--kamp-gold);
+      border: 1px solid var(--kamp-gold);
       border-radius: 4px;
       cursor: pointer;
       width: 100%;
@@ -107,40 +118,43 @@
       margin-top: 15px;
     }
     .btn:hover {
-      background: #11331c;
-      box-shadow: 0 0 10px rgba(197, 160, 89, 0.5);
+      background: var(--kamp-gold);
+      color: #000;
+      box-shadow: 0 0 15px rgba(197, 160, 89, 0.6);
     }
 
     /* Quiz Styling */
     .progress-bar-bg {
-      background: rgba(26, 71, 42, 0.2);
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid var(--kamp-gold);
       border-radius: 4px;
       height: 10px;
       width: 100%;
       margin-bottom: 20px;
     }
     .progress-bar-fill {
-      background: var(--kamp-green);
+      background: var(--kamp-gold);
       height: 100%;
       width: 0%;
-      border-radius: 4px;
       transition: width 0.3s ease;
+      box-shadow: 0 0 10px var(--kamp-gold);
     }
 
     .question-title {
       font-size: 1.4rem;
-      color: var(--kamp-green);
+      color: var(--kamp-gold);
       margin-bottom: 20px;
       line-height: 1.5;
       font-weight: bold;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
     }
 
     .option-btn {
       display: block;
       width: 100%;
-      background: rgba(255, 255, 255, 0.5);
+      background: rgba(0, 0, 0, 0.4);
       border: 1px solid var(--kamp-gold);
-      color: var(--ink);
+      color: var(--text-light);
       padding: 14px 18px;
       margin-bottom: 12px;
       border-radius: 4px;
@@ -152,20 +166,22 @@
     }
     .option-btn:hover {
       background: rgba(197, 160, 89, 0.2);
-      border-color: var(--kamp-green);
+      border-color: var(--kamp-light-gold);
+      color: var(--kamp-light-gold);
       transform: translateX(4px);
     }
 
     /* Schedule View */
     #dossier {
-      background: #fdfbf7;
-      border: 2px solid var(--ink);
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid var(--kamp-gold);
       padding: 30px;
-      color: var(--ink);
-      font-family: monospace; /* For schedule alignment */
+      color: var(--kamp-light-gold);
+      font-family: monospace;
       font-size: 1rem;
-      white-space: pre-wrap; /* Preserves formatting */
-      box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+      white-space: pre-wrap; 
+      box-shadow: inset 0 0 15px rgba(0,0,0,0.8);
+      border-radius: 4px;
     }
 
     .hidden { display: none; }
@@ -181,26 +197,26 @@
       <h1 class="title">Official Letter of Acceptance</h1>
       <div class="letter-content">
         <p>Dear <input type="text" id="playerName" class="inline-input" placeholder="Parent/Guardian Name">,</p>
-        <p>The Konran Academy of Might & Proficiency (K.A.M.P.) is pleased to inform you that your ward, <input type="text" id="charName" class="inline-input" placeholder="Student Name">, has been accepted for the upcoming academic term[cite: 1].</p>
-        <p>Before arriving on campus, all incoming students must complete the Student Intake & Aspirations Questionnaire. This evaluation will determine their Primary Path and assign them to one of our esteemed faculty advisors[cite: 1].</p>
+        <p>The Konran Academy of Might & Proficiency (K.A.M.P.) is pleased to inform you that your ward, <input type="text" id="charName" class="inline-input" placeholder="Student Name">, has been accepted for the upcoming academic term.</p>
+        <p>Before arriving on campus, all incoming students must complete the Student Intake & Aspirations Questionnaire. This evaluation will determine their Primary Path and assign them to one of our esteemed faculty advisors.</p>
         
         <div class="house-desc">
           <strong>The Four Paths of K.A.M.P:</strong><br>
-          • <strong>Gryffon:</strong> The path of martial prowess, tactical combat, physical conditioning, and unwavering duty[cite: 1].<br>
-          • <strong>Spynx:</strong> The path of alchemy, research, logic, and profound technical understanding[cite: 1].<br>
-          • <strong>Hydra:</strong> The path of the arcane arts, life science, mental discipline, and planar magic[cite: 1].<br>
-          • <strong>Unycorn:</strong> The path of performance, music, roguish arts, chance, and magnificent unpredictability[cite: 1].
+          • <strong>Gryffon:</strong> The path of martial prowess, tactical combat, physical conditioning, and unwavering duty.<br>
+          • <strong>Spynx:</strong> The path of alchemy, research, logic, and profound technical understanding.<br>
+          • <strong>Hydra:</strong> The path of the arcane arts, life science, mental discipline, and planar magic.<br>
+          • <strong>Unycorn:</strong> The path of performance, music, roguish arts, chance, and magnificent unpredictability.
         </div>
 
         <p>Please ensure the questionnaire is completed with absolute honesty.</p>
-        <p><em>— Headmistress Kanyssa Applebaum & Headmistrex Syster Satisfaction</em>[cite: 1]</p>
+        <p><em>— Headmistress Kanyssa Applebaum & Headmistrex Syster Satisfaction</em></p>
       </div>
       <button class="btn" onclick="startQuiz()">COMMENCE EVALUATION</button>
     </div>
 
     <!-- Step 2: Interactive Quiz -->
     <div id="step-quiz" class="hidden">
-      <div style="font-size: 0.9rem; color: var(--kamp-green); margin-bottom: 10px;" id="question-count">QUESTION 1 OF 20</div>
+      <div style="font-size: 0.9rem; color: var(--kamp-gold); margin-bottom: 10px;" id="question-count">QUESTION 1 OF 20</div>
       <div class="progress-bar-bg">
         <div id="progress-fill" class="progress-bar-fill"></div>
       </div>
@@ -225,7 +241,7 @@
   </div>
 
   <script>
-    // Data Structure combining the Questions and the Master Scoring Rubric[cite: 1]
+    // Data Structure combining the Questions and the Master Scoring Rubric
     const QUESTIONS = [
       {
         id: 1, title: "The Descending Ceiling: You are trapped in a room with a rapidly descending ceiling. What is your immediate instinct?",
@@ -417,7 +433,7 @@
     // Core scores
     let pathScores = { Gryffon: 0, Spynx: 0, Hydra: 0, Unycorn: 0 };
     
-    // Saved strings for the schedule[cite: 1]
+    // Saved strings for the schedule
     let savedClub = "";
     let savedElective = "";
     let savedGoal = "";
@@ -460,7 +476,7 @@
         pathScores[path] += points;
       }
 
-      // Save specific answers for the final schedule[cite: 1]
+      // Save specific answers for the final schedule
       if (currentQ === 3) savedClub = text.split('(')[0].trim();  // Q4
       if (currentQ === 5) savedElective = text;                   // Q6
       if (currentQ === 12) savedGoal = text;                      // Q13
@@ -509,7 +525,7 @@
     }
 
     function getAdvisor(primary) {
-      // Logic from rubric[cite: 1]
+      // Logic from rubric
       if (primary === "Gryffon") return "Commander Lysander Lyteheart (Games Mistress / Valkyrie)";
       if (primary === "Spynx") return "Aukymba (Head of Life Science) or Prof. Yvctus (Tactician Master)";
       if (primary === "Hydra") return "Lady Byon (Head of Arcane Arts) or Tao (Guru of Faith)";
@@ -526,7 +542,7 @@
       const secondaryPath = sortedPaths[1][0];
       const advisor = getAdvisor(primaryPath);
 
-      // Construct plain text schedule[cite: 1]
+      // Construct plain text schedule
       const scheduleText = `====================================================================
            KONRAN ACADEMY OF MIGHT & PROFICIENCY (K.A.M.P.)
                   OFFICIAL FIRST-YEAR REGISTRATION
@@ -576,7 +592,7 @@ APPROVED BY: Headmistress Kanyssa Applebaum & Headmistrex Syster Satisfaction
         margin:       0.5,
         filename:     `${studentName.replace(/\s+/g, '_')}_KAMP_Schedule.pdf`,
         image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, backgroundColor: '#fdfbf7' },
+        html2canvas:  { scale: 2, backgroundColor: '#020205' },
         jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
       };
       html2pdf().set(opt).from(element).save();
