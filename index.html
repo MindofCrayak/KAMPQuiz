@@ -8,12 +8,19 @@
   <!-- html2pdf for PDF generation -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
-  <!-- KAMP Font -->
+  <!-- Google Fonts: Belleza for headers, Exo 2 as a fallback -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Belleza&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Belleza&family=Exo+2:wght@400;600&display=swap" rel="stylesheet">
 
   <style>
+    @font-face {
+      font-family: 'EuroStyle';
+      src: url('https://cdn.jsdelivr.net/gh/MindofCrayak/Konran-Fonts@main/Eurostile%20Extended%20Bold/EuroStyle%20Normal.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
     :root {
       --kamp-gold: #d4af37;
       --kamp-mint: #bcdbb0;
@@ -23,6 +30,10 @@
       --kamp-dark: #111827;
       --kamp-dark-teal: #03444e;
       --space-dark: #020205;
+      
+      /* Table Colors based on image_0fe454.png */
+      --table-green: #9fb396; 
+      --table-cream: #f4eee0;
     }
 
     body {
@@ -174,17 +185,44 @@
       box-shadow: inset 0 0 10px rgba(84, 1, 98, 0.1);
     }
 
-    /* Schedule View */
+    /* Clean Dossier / Schedule Table */
     #dossier {
-      background: var(--kamp-dark);
-      border: 2px solid var(--kamp-gold);
-      padding: 30px;
-      color: var(--kamp-mint);
-      font-family: monospace;
+      padding: 10px 0 30px 0;
+    }
+
+    .schedule-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: 'EuroStyle', 'Exo 2', sans-serif;
       font-size: 1rem;
-      white-space: pre-wrap; 
-      border-radius: 4px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+      color: var(--kamp-dark);
+      border: 2px solid var(--kamp-dark-teal);
+      margin-bottom: 20px;
+    }
+
+    .schedule-table td {
+      padding: 8px 12px;
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+
+    /* Alternating row styling inspired by image_0fe454.png */
+    .schedule-row:nth-child(odd) {
+      background-color: var(--table-green);
+    }
+    
+    .schedule-row:nth-child(even) {
+      background-color: var(--table-cream);
+    }
+
+    .schedule-header-row {
+      background-color: var(--kamp-dark-teal);
+      color: var(--kamp-gold);
+      font-weight: bold;
+      text-transform: uppercase;
+      font-family: 'Belleza', sans-serif;
+      font-size: 1.1rem;
+      text-align: center;
+      border: 2px solid var(--kamp-dark-teal);
     }
 
     .hidden { display: none; }
@@ -244,7 +282,7 @@
   </div>
 
   <script>
-    // PASTE YOUR GOOGLE WEB APP URL HERE:
+    // Database Web App URL
     const GOOGLE_SHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwx1xjpqKK0o0TWcrd5FjfdZLlhttLlwc3QZZIkeZ6CPVYkSAUah9Vvb0Y3TrOChFtEFQ/exec";
 
     // Data Structure combining the Questions and the Master Scoring Rubric
@@ -576,48 +614,86 @@
       const secondaryPath = sortedPaths[1][0];
       const advisor = getAdvisor(primaryPath);
 
-      // Construct plain text schedule
-      const scheduleText = `====================================================================
-           KONRAN ACADEMY OF MIGHT & PROFICIENCY (K.A.M.P.)
-                  OFFICIAL FIRST-YEAR REGISTRATION
-====================================================================
+      // Generate the styled HTML Table
+      const scheduleHTML = `
+        <h2 style="text-align:center; color:var(--kamp-purple); font-family:'Belleza', sans-serif; margin-bottom: 5px;">KONRAN ACADEMY OF MIGHT & PROFICIENCY</h2>
+        <h3 style="text-align:center; margin-top: 0; margin-bottom: 25px; color:var(--kamp-dark-teal); font-family:'Belleza', sans-serif;">OFFICIAL FIRST-YEAR REGISTRATION</h3>
+        
+        <table class="schedule-table">
+          <tr class="schedule-row">
+            <td style="width: 35%;"><strong>STUDENT NAME:</strong></td>
+            <td>${studentName.toUpperCase()}</td>
+          </tr>
+          <tr class="schedule-row">
+            <td><strong>PRIMARY PATH:</strong></td>
+            <td>${primaryPath}</td>
+          </tr>
+          <tr class="schedule-row">
+            <td><strong>SECONDARY FOCUS:</strong></td>
+            <td>${secondaryPath}</td>
+          </tr>
 
-STUDENT NAME: ${studentName.toUpperCase()}
-PRIMARY PATH: [ Highest Score: ${primaryPath} ]
-SECONDARY FOCUS: [ Second Highest: ${secondaryPath} ]
+          <tr class="schedule-header-row">
+            <td colspan="2">1. Assigned Faculty Advisor</td>
+          </tr>
+          <tr class="schedule-row">
+            <td colspan="2" style="text-align: center;">• ${advisor}</td>
+          </tr>
 
---------------------------------------------------------------------
-1. ASSIGNED FACULTY ADVISOR
---------------------------------------------------------------------
-• ${advisor}
+          <tr class="schedule-header-row">
+            <td colspan="2">2. Core Adventure Training Academia</td>
+          </tr>
+          <tr class="schedule-row">
+            <td colspan="2">[Block 1] Fundamental Physicality & Conditioning (Coach Thrain Ironarm)</td>
+          </tr>
+          <tr class="schedule-row">
+            <td colspan="2">[Block 2] World History, Games & Theory (Professor Yvctus)</td>
+          </tr>
+          <tr class="schedule-row">
+            <td colspan="2">[Block 3] Applied Magic & Mind Fundamentals (Lady Byon & Tao)</td>
+          </tr>
+          <tr class="schedule-row">
+            <td colspan="2">[Block 4] Hearth, Home & Campus Ethics (Syster Servytude / Pryme Kama)</td>
+          </tr>
 
---------------------------------------------------------------------
-2. CORE ADVENTURE TRAINING ACADEMIA (Mandatory First-Year)
---------------------------------------------------------------------
-[Block 1] Fundamental Physicality & Conditioning (Coach Thrain Ironarm)
-[Block 2] World History, Games & Theory (Professor Yvctus)
-[Block 3] Applied Magic & Mind Fundamentals (Lady Byon & Tao)
-[Block 4] Hearth, Home & Campus Ethics (Syster Servytude / Pryme Kama)
+          <tr class="schedule-header-row">
+            <td colspan="2">3. Path Specialization & Elective Major</td>
+          </tr>
+          <tr class="schedule-row">
+            <td><strong>Primary Major:</strong></td>
+            <td>${savedElective}</td>
+          </tr>
+          <tr class="schedule-row">
+            <td><strong>Secondary Elective:</strong></td>
+            <td>Focus based on ${secondaryPath} path</td>
+          </tr>
 
---------------------------------------------------------------------
-3. PATH SPECIALIZATION & ELECTIVE MAJOR
---------------------------------------------------------------------
-Primary Major: ${savedElective}
-Secondary Elective: [ Focus based on ${secondaryPath} ]
+          <tr class="schedule-header-row">
+            <td colspan="2">4. Campus Lifestyle & Extracurricular</td>
+          </tr>
+          <tr class="schedule-row">
+            <td><strong>Campus Duty:</strong></td>
+            <td>${savedDuty}</td>
+          </tr>
+          <tr class="schedule-row">
+            <td><strong>Extracurricular Club:</strong></td>
+            <td>${savedClub}</td>
+          </tr>
+          <tr class="schedule-row">
+            <td><strong>Masquerade Goal:</strong></td>
+            <td>${savedGoal}</td>
+          </tr>
+        </table>
 
---------------------------------------------------------------------
-4. CAMPUS LIFESTYLE, DUTY & EXTRACURRICULAR CLUB
---------------------------------------------------------------------
-Campus Operational Duty: ${savedDuty}
-Extracurricular Club:   ${savedClub}
-Masquerade Target Goal:  ${savedGoal}
+        <div style="margin-top:20px; font-weight:bold; text-align:center; font-family:'EuroStyle', 'Exo 2', sans-serif;">
+          KAMP KODEX ISSUED: [X] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; BLOOD-BOUND SEAL: [X]<br>
+          <span style="font-size:0.9rem; font-style:italic; font-family:'Belleza', sans-serif; color:var(--kamp-purple); display:block; margin-top:10px;">
+            Approved by: Headmistress Kanyssa Applebaum & Headmistrex Syster Satisfaction
+          </span>
+        </div>
+      `;
 
---------------------------------------------------------------------
-KAMP KODEX ISSUED: [X]               BLOOD-BOUND SEAL: [X]
-APPROVED BY: Headmistress Kanyssa Applebaum & Headmistrex Syster Satisfaction
-====================================================================`;
-
-      document.getElementById("dossier").innerText = scheduleText;
+      document.getElementById("dossier").innerHTML = scheduleHTML;
       
       // Send the results to the database
       sendToGoogleSheet(primaryPath, secondaryPath);
@@ -629,7 +705,7 @@ APPROVED BY: Headmistress Kanyssa Applebaum & Headmistrex Syster Satisfaction
         margin:       0.5,
         filename:     `${studentName.replace(/\s+/g, '_')}_KAMP_Schedule.pdf`,
         image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, backgroundColor: '#111827' },
+        html2canvas:  { scale: 2, backgroundColor: null }, // Allows background transparency to let parchment through, or defaults to white if needed.
         jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
       };
       html2pdf().set(opt).from(element).save();
