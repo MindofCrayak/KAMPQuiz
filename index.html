@@ -320,12 +320,33 @@
 
     .hidden { display: none !important; }
 
-    /* NATIVE PRINT CSS - simplified to only enforce colors and page size */
+    /* NATIVE PRINT CSS - This activates when they hit the print button */
+    #print-mount {
+      display: none;
+    }
+
     @media print {
       @page {
         size: letter landscape;
         margin: 0.25in;
       }
+      body, html {
+        background: #ffffff !important;
+        background-image: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+      /* Physically remove the entire app UI and background from the print spooler */
+      .app-container {
+        display: none !important;
+      }
+      /* Show ONLY the isolated print container */
+      #print-mount {
+        display: block !important;
+        width: 100%;
+        background: #ffffff !important;
+      }
+      /* Force browser to print table background colors */
       * {
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
@@ -353,7 +374,7 @@
 <body>
 
   <!-- Hidden mount for holding the document when printing natively -->
-  <div id="print-mount" style="display: none; padding: 20px;"></div>
+  <div id="print-mount"></div>
 
   <div class="app-container">
     <img src="https://i.imgur.com/jYVn7hK.png" alt="KAMP Logo" class="kamp-logo" id="main-logo" crossorigin="anonymous">
@@ -404,7 +425,7 @@
       
       <!-- Daily Schedule Wrapper. Rendered invisibly on page flow so it correctly scales -->
       <div class="dossier-wrapper" style="height: 0; overflow: hidden; margin: 0; padding: 0; visibility: hidden; position: absolute; z-index: -1;">
-        <div id="daily-dossier" style="width: 100%;"></div>
+        <div id="daily-dossier" style="width: 1050px;"></div>
       </div>
       
       <div class="button-group">
@@ -863,43 +884,26 @@
       });
     }
 
-    // Completely overhauled native print logic
+    // New Native Print Function
     function printNative(elementId, documentTitle) {
-      const appContainer = document.querySelector('.app-container');
-      const printMount = document.getElementById('print-mount');
+      const mount = document.getElementById('print-mount');
+      const content = document.getElementById(elementId).innerHTML;
       
-      // Inject the HTML into the print mount
-      printMount.innerHTML = document.getElementById(elementId).innerHTML;
+      // Load content into the temporary mount
+      mount.innerHTML = content;
       
-      // Physically hide the main app and show the print mount in the DOM
-      appContainer.style.display = 'none';
-      printMount.style.display = 'block';
-      
-      // Clear body background/padding so it doesn't interrupt the print layout
-      const ogBodyBg = document.body.style.background;
-      const ogBodyPadding = document.body.style.padding;
-      document.body.style.background = '#ffffff';
-      document.body.style.padding = '0';
-      
-      // Temporarily change the page title for a clean PDF file name
+      // Temporarily change the document title so the saved PDF has a nice file name
       const originalTitle = document.title;
       document.title = `${studentName.replace(/\s+/g, '_')}_KAMP_${documentTitle}`;
       
-      // Wait exactly 250 milliseconds to guarantee the mobile browser has painted the DOM changes
+      // Trigger native browser print menu
+      window.print();
+      
+      // Clean up after the print dialog is closed
       setTimeout(() => {
-        window.print();
-        
-        // Revert all DOM changes once the print dialog is closed (or after 1 second)
-        setTimeout(() => {
-          appContainer.style.display = 'block';
-          printMount.style.display = 'none';
-          printMount.innerHTML = '';
-          
-          document.body.style.background = ogBodyBg;
-          document.body.style.padding = ogBodyPadding;
-          document.title = originalTitle;
-        }, 1000);
-      }, 250);
+        mount.innerHTML = '';
+        document.title = originalTitle;
+      }, 1000);
     }
   </script>
 </body>
