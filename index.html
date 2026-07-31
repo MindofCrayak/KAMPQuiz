@@ -386,7 +386,8 @@
         <div id="dossier"></div>
       </div>
       
-      <div id="daily-dossier-wrapper" style="display: none; position: absolute; opacity: 0; pointer-events: none; z-index: -100;">
+      <!-- Safe hidden container without opacity:0 -->
+      <div id="daily-dossier-wrapper" style="display: none; position: absolute; z-index: -100;">
         <div id="daily-dossier" style="width: 1050px;"></div>
       </div>
       
@@ -590,7 +591,6 @@
       const pElec = COURSE_DETAILS[pElecCode];
       const sElec = COURSE_DETAILS[sElecCode];
 
-      // --- HTML MATRIX: Table Header replaces Flexbox to prevent PDF squishing ---
       const scheduleHTML = `
         <table style="width: 100%; border-bottom: 2px solid var(--kamp-purple); margin-bottom: 15px; border-collapse: collapse;">
           <tr>
@@ -842,44 +842,61 @@
       });
     }
 
-    // THE FIX: Creates a temporary, off-screen duplicate at desktop width to bypass mobile scaling completely.
-    function generateAndDownloadPDF(elementId, filename) {
-      const original = document.getElementById(elementId);
-      
-      const printContainer = document.createElement('div');
-      printContainer.style.position = 'absolute';
-      printContainer.style.left = '-9999px';
-      printContainer.style.top = '0';
-      printContainer.style.width = '1050px'; 
-      printContainer.style.backgroundColor = '#ffffff';
-      
-      const clone = original.cloneNode(true);
-      clone.style.display = 'block';
-      clone.style.margin = '0';
-      clone.style.minWidth = '1050px';
-      
-      printContainer.appendChild(clone);
-      document.body.appendChild(printContainer);
-      
-      const opt = {
-        margin:       0.2, 
-        filename:     filename,
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true, backgroundColor: '#ffffff', scrollY: 0 }, 
-        jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' } 
-      };
-      
-      html2pdf().set(opt).from(printContainer).save().then(() => {
-        document.body.removeChild(printContainer);
-      });
+    // THE FIX: Directly format the actual element on screen briefly, forcing it to desktop width before snapping
+    function prepareForPDF(elementId) {
+      const el = document.getElementById(elementId);
+      el.style.width = '1050px';
+      el.style.minWidth = '1050px';
+      el.style.maxWidth = '1050px';
+      el.style.margin = '0';
+      return el;
+    }
+
+    function resetAfterPDF(elementId) {
+      const el = document.getElementById(elementId);
+      el.style.width = '';
+      el.style.minWidth = '';
+      el.style.maxWidth = '';
     }
 
     function downloadPDF() {
-      generateAndDownloadPDF('dossier', `${studentName.replace(/\s+/g, '_')}_KAMP_Class_Matrix.pdf`);
+      const element = prepareForPDF('dossier');
+      
+      const opt = {
+        margin:       0.2, 
+        filename:     `${studentName.replace(/\s+/g, '_')}_KAMP_Class_Matrix.pdf`,
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2, useCORS: true, backgroundColor: '#ffffff', scrollY: 0, windowWidth: 1100 }, 
+        jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' } 
+      };
+      
+      html2pdf().set(opt).from(element).save().then(() => {
+        resetAfterPDF('dossier');
+      });
     }
 
     function downloadDailyPDF() {
-      generateAndDownloadPDF('daily-dossier', `${studentName.replace(/\s+/g, '_')}_KAMP_Daily_36hr_Cycle.pdf`);
+      const wrapper = document.getElementById('daily-dossier-wrapper');
+      // Unhide and place into normal flow for a split second so the engine can capture it
+      wrapper.style.display = 'block'; 
+      wrapper.style.position = 'static';
+      
+      const element = prepareForPDF('daily-dossier');
+
+      const opt = {
+        margin:       0.2,
+        filename:     `${studentName.replace(/\s+/g, '_')}_KAMP_Daily_36hr_Cycle.pdf`,
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2, useCORS: true, backgroundColor: '#ffffff', scrollY: 0, windowWidth: 1100 },
+        jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' } 
+      };
+      
+      html2pdf().set(opt).from(element).save().then(() => {
+        resetAfterPDF('daily-dossier');
+        // Hide again
+        wrapper.style.display = 'none'; 
+        wrapper.style.position = 'absolute';
+      });
     }
   </script>
 </body>
