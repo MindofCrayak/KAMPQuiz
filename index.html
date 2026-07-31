@@ -46,7 +46,7 @@
 
     .app-container {
       width: 90%;
-      max-width: 850px; 
+      max-width: 900px; 
       margin: 0 auto;
       background: url('https://i.imgur.com/ipirojq.png') no-repeat center center;
       background-size: cover;
@@ -56,6 +56,7 @@
       position: relative;
       color: var(--kamp-dark);
       box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(0, 0, 0, 0.3);
+      overflow: hidden; 
     }
 
     .kamp-logo {
@@ -125,6 +126,25 @@
       border-color: var(--kamp-lavender);
       box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
     }
+    
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.5);
+      color: var(--kamp-purple);
+      border: 2px solid var(--kamp-purple);
+    }
+    .btn-secondary:hover {
+      background: var(--kamp-gold);
+      color: var(--kamp-purple);
+      border-color: var(--kamp-purple);
+    }
+
+    .button-group {
+      display: flex;
+      gap: 15px;
+      margin-top: 20px;
+    }
+    
+    .button-group .btn { margin-top: 0; }
 
     .progress-bar-bg {
       background: rgba(3, 68, 78, 0.2);
@@ -173,12 +193,20 @@
 
     /* Urban Fantasy Corporate PDF Container */
     #dossier { 
-      padding: 20px; 
+      padding: 25px; 
       background: #ffffff;
       color: var(--kamp-dark);
       border: 2px solid var(--kamp-dark-teal);
       border-radius: 4px;
       margin-bottom: 20px;
+    }
+    
+    /* Off-screen container strictly for HTML2PDF rendering */
+    #daily-dossier {
+      position: absolute;
+      left: -9999px;
+      top: 0;
+      width: 1050px; 
     }
 
     /* Bureaucratic Branding Table Classes */
@@ -188,16 +216,17 @@
       font-size: 0.8rem;
       font-family: 'EuroStyle', 'Exo 2', sans-serif;
       margin-bottom: 15px;
-      border: 2px solid var(--kamp-dark-teal);
+      border: 2px solid var(--kamp-purple); /* Changed border to tie in the new top header */
     }
     .bureaucratic-table th, .bureaucratic-table td {
-      border: 1px solid rgba(3, 68, 78, 0.3); /* Soft teal grid lines */
+      border: 1px solid rgba(3, 68, 78, 0.3);
       padding: 6px 8px;
+      vertical-align: top;
     }
     .bureaucratic-table th { text-align: left; }
     
     .schedule-header-row {
-      background-color: var(--kamp-dark-teal);
+      background-color: var(--kamp-purple);
       color: var(--kamp-gold);
       text-align: center;
       font-size: 0.95rem;
@@ -207,13 +236,13 @@
     }
     
     .col-header-row {
-      background-color: rgba(13, 148, 136, 0.15); /* Light teal tint */
-      color: var(--kamp-dark-teal);
+      background-color: var(--kamp-gold); 
+      color: var(--kamp-purple);
       font-weight: bold;
     }
 
     .campus-row {
-      background-color: var(--kamp-purple);
+      background-color: var(--kamp-dark-teal);
       color: var(--kamp-lavender);
       font-weight: bold;
       text-transform: uppercase;
@@ -227,9 +256,45 @@
     .course-title {
       color: var(--kamp-purple);
       font-weight: bold;
+    }
+    
+    .dossier-course-title {
+      color: var(--kamp-purple);
+      font-weight: bold;
       text-decoration: underline;
     }
     .course-place { color: var(--kamp-dark-teal); font-weight: bold; }
+
+    /* New CSS for the structured report blocks below the table */
+    .report-grid {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 15px;
+      font-family: 'Belleza', sans-serif;
+    }
+    
+    .report-box {
+      flex: 1;
+      border: 1px solid var(--kamp-dark-teal);
+      border-radius: 4px;
+      padding: 12px;
+      background: rgba(13, 148, 136, 0.05); /* Slight teal tint */
+    }
+    
+    .report-box h4 {
+      margin: 0 0 8px 0;
+      color: var(--kamp-purple);
+      border-bottom: 1px solid var(--kamp-gold);
+      padding-bottom: 4px;
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .report-box p {
+      margin: 4px 0;
+      font-size: 0.95rem;
+    }
 
     .social-footer {
       margin-top: 30px;
@@ -318,7 +383,12 @@
 
     <div id="step-result" class="hidden">
       <div id="dossier"></div>
-      <button class="btn" onclick="downloadPDF()">PRINT OFFICIAL SCHEDULE (PDF)</button>
+      <div id="daily-dossier"></div>
+      
+      <div class="button-group">
+        <button class="btn" onclick="downloadPDF()">PRINT CLASS SCHEDULE (PDF)</button>
+        <button class="btn btn-secondary" onclick="downloadDailyPDF()">PRINT 36-HR DAILY CYCLE (PDF)</button>
+      </div>
 
       <div class="social-footer">
         <div class="social-footer-title">Establish Comms with GMoD</div>
@@ -343,8 +413,16 @@
     const PATH_DATA = {
       Gryffon: { continuation: "GRY-202 (Advanced Combat & Arena Mechanics)", secTrack: "GRY-210 (Zyng! Practicum & Dungeon Navigation)", capstone: "GRY-300 (Tactical Mastery & Arena Warfare)" },
       Spynx: { continuation: "SPH-201 (Information Literacy & VR Systems)", secTrack: "SPH-220 (Flora & Fauna Studies - Advanced)", capstone: "SPH-330 (Astrophysics, Realm Traversal & Planar Science)" },
-      Hydra: { continuation: "HYD-215 (Artifact Identification & Arcane Archaeology)", secTrack: "HYD-220 (Applied Necromancy & Spirit Studies) OR DIV-250 (Divination)", capstone: "HYD-350 (Mind-Forging & Psionic Metallurgy)" },
+      Hydra: { continuation: "HYD-215 (Artifact Identification & Arcane Archaeology)", secTrack: "HYD-220 (Applied Necromancy & Spirit Studies)", capstone: "HYD-350 (Mind-Forging & Psionic Metallurgy)" },
       Unycorn: { continuation: "UNI-202 (Dramatic Arts & Masquerade Pageantry)", secTrack: "UNI-210 (Deception & Subterfuge - Advanced)", capstone: "UNI-300 (Virtuoso Performance & Master Shadowcraft)" }
+    };
+
+    // Explicitly separated advisors per user request
+    const ADVISORS = {
+      Gryffon: { house: "Commander Lysander Lyteheart", faculty: "Prof. T. Ironarm" },
+      Spynx: { house: "Prof. Yvctus", faculty: "Aukymba" },
+      Hydra: { house: "Lady Byon", faculty: "Tao" },
+      Unycorn: { house: "Flaryotta", faculty: "Shade" }
     };
 
     const COURSE_DETAILS = {
@@ -354,7 +432,7 @@
       "HYD-101": { title: "MAGIC BASICS & ARCANE PRECISION", instructor: "L. Byon", place: "HYD-245", fullString: "HYD-101: Magic Basics & Arcane Precision (2 Cr)" },
       "UNI-101": { title: "ACOUSTIC THEORY & COMPOSITION", instructor: "Flaryotta", place: "UNI-151", fullString: "UNI-101: Acoustic Theory & Musical Composition (2 Cr)" },
       "UNI-110": { title: "DECEPTION & SUBTERFUGE", instructor: "Shade", place: "UNI-249", fullString: "UNI-110: Deception & Subterfuge (2 Cr)" },
-      "DIV-101": { title: "DIVINE BASICS & FAITH CHANNELING", instructor: "Tao / P. Kama", place: "DIV-211", fullString: "DIV-101: Divine Basics & Faith Channeling (2 Cr)" },
+      "DIV-101": { title: "DIVINE BASICS & FAITH CHANNELING", instructor: "Tao", place: "DIV-211", fullString: "DIV-101: Divine Basics & Faith Channeling (2 Cr)" },
       "LEG-110": { title: "CIVIC RESPONSIBILITY & PHILANTHROPY", instructor: "P. Kama", place: "LEG-204", fullString: "LEG-110: Civic Responsibility, Public Ethics & Philanthropy (2 Cr)" },
       "HRT-101": { title: "CULINARY ALCHEMY & HEARTH SCIENCE", instructor: "I. Flamestove", place: "HRT-204", fullString: "HRT-101: Culinary Alchemy & Hearth Science (2 Cr)" }
     };
@@ -479,14 +557,6 @@
       }
     }
 
-    function getAdvisor(primary) {
-      if (primary === "Gryffon") return "Commander Lysander Lyteheart (Games Mistress)";
-      if (primary === "Spynx") return "Aukymba (Life Science) or Prof. Yvctus (Tactician)";
-      if (primary === "Hydra") return "Lady Byon (Arcane Arts) or Tao (Guru of Faith)";
-      if (primary === "Unycorn") return "Flaryotta (Music) or Shade (Roguish Arts)";
-      return "TBD";
-    }
-
     function sendToGoogleSheet(primaryPath, secondaryPath, pd) {
       if (!GOOGLE_SHEET_SCRIPT_URL) return;
       const formattedScores = Object.entries(pathScores).filter(([path, pts]) => pts > 0).map(([path, pts]) => `${path}: ${pts}`).join(" | ");
@@ -506,8 +576,8 @@
       const sortedPaths = Object.entries(pathScores).sort((a, b) => b[1] - a[1]);
       const primaryPath = sortedPaths[0][0];
       const secondaryPath = sortedPaths[1][0];
-      const advisor = getAdvisor(primaryPath);
       const primaryData = PATH_DATA[primaryPath];
+      const assignedAdvisors = ADVISORS[primaryPath];
       
       const sortedElectives = Object.entries(electiveScores).sort((a, b) => b[1] - a[1]);
       
@@ -516,12 +586,17 @@
       const pElec = COURSE_DETAILS[pElecCode];
       const sElec = COURSE_DETAILS[sElecCode];
 
+      // --- 1. Generate Main Class Schedule (With Structural Enhancements) ---
       const scheduleHTML = `
-        <div style="text-align:center; font-family: 'EuroStyle', sans-serif; font-size: 0.9rem; margin-bottom: 12px; color: var(--kamp-dark-teal);">
-          Schedule Search results for: Student <strong>${studentName.toUpperCase()}</strong> in <strong>Term 1 (Ovesters 1 & 2)</strong>.<br>
-          Click on the <strong>name of the course</strong> to view detailed information for that course.<br>
-          <strong>Note: Departmental electives and core courses follow the 9-Day Konran Matrix.</strong><br>
-          <em style="font-size: 0.8rem; color: var(--kamp-purple);">P = Pacem, F = Fortudo, S = Sutya, V = Vetyta, J = Juvaus, A = Amzytia, D = Dysci, L = Ludus, G = Grattudo</em>
+        <!-- Custom Header with Logo -->
+        <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid var(--kamp-purple); padding-bottom: 12px; margin-bottom: 15px;">
+          <img src="https://i.imgur.com/jYVn7hK.png" alt="KAMP Logo" style="width: 110px;">
+          <div style="text-align:right; font-family: 'EuroStyle', sans-serif; font-size: 0.9rem; color: var(--kamp-dark-teal); line-height: 1.4;">
+            <strong style="font-size: 1.2rem; color: var(--kamp-purple);">OFFICIAL SCHEDULE OF CLASSES</strong><br>
+            Student: <strong style="color: var(--kamp-dark);">${studentName.toUpperCase()}</strong> | Term: <strong>1 (Ovesters 1 & 2)</strong><br>
+            <em style="font-size: 0.8rem;">Note: Departmental electives and core courses follow the 9-Day Konran Matrix.</em><br>
+            <span style="font-size: 0.75rem; color: var(--kamp-purple);">P=Pacem, F=Fortudo, S=Sutya, V=Vetyta, J=Juvaus, A=Amzytia, D=Dysci, L=Ludus, G=Grattudo</span>
+          </div>
         </div>
 
         <table class="bureaucratic-table">
@@ -546,7 +621,7 @@
             </tr>
             <tr class="schedule-row">
               <td>CORE105</td>
-              <td class="course-title">MARTIAL PRACTICE & ARENA</td>
+              <td class="dossier-course-title">MARTIAL PRACTICE & ARENA</td>
               <td>P S A L</td>
               <td>8:00AM-9:50AM</td>
               <td>T. Ironarm</td>
@@ -556,7 +631,7 @@
             </tr>
             <tr class="schedule-row">
               <td>CORE104</td>
-              <td class="course-title">HISTORY & APPLIED TACTICS</td>
+              <td class="dossier-course-title">HISTORY & APPLIED TACTICS</td>
               <td>P S A L</td>
               <td>10:00AM-11:50AM</td>
               <td>Prof. Yvctus</td>
@@ -566,7 +641,7 @@
             </tr>
             <tr class="schedule-row">
               <td>${pElecCode.replace('-', '')}</td>
-              <td class="course-title">${pElec.title}</td>
+              <td class="dossier-course-title">${pElec.title}</td>
               <td>P S A L</td>
               <td>1:00PM-2:50PM</td>
               <td>${pElec.instructor}</td>
@@ -576,7 +651,7 @@
             </tr>
             <tr class="schedule-row">
               <td>CORE106</td>
-              <td class="course-title">CELESTIAL NAVIGATION 101</td>
+              <td class="dossier-course-title">CELESTIAL NAVIGATION 101</td>
               <td>P F S V A D L</td>
               <td>3:00PM-4:20PM</td>
               <td>Olloppa</td>
@@ -586,7 +661,7 @@
             </tr>
             <tr class="schedule-row">
               <td>CORE101</td>
-              <td class="course-title">SURVIVALISM & KODEX OATH</td>
+              <td class="dossier-course-title">SURVIVALISM & KODEX OATH</td>
               <td>F V D G</td>
               <td>8:00AM-11:50AM</td>
               <td>S. Satysfaction</td>
@@ -596,7 +671,7 @@
             </tr>
             <tr class="schedule-row">
               <td>${sElecCode.replace('-', '')}</td>
-              <td class="course-title">${sElec.title}</td>
+              <td class="dossier-course-title">${sElec.title}</td>
               <td>F V D G</td>
               <td>1:00PM-2:50PM</td>
               <td>${sElec.instructor}</td>
@@ -606,7 +681,7 @@
             </tr>
             <tr class="schedule-row">
               <td>FEST000</td>
-              <td class="course-title">ACADEMIC RECESS & MARKET</td>
+              <td class="dossier-course-title">ACADEMIC RECESS & MARKET</td>
               <td>J</td>
               <td>ALL DAY</td>
               <td>N/A</td>
@@ -617,18 +692,129 @@
           </tbody>
         </table>
 
-        <div style="text-align: center; font-family: 'Belleza', sans-serif; font-size: 0.9rem; margin-top: 15px; color: var(--kamp-dark);">
+        <!-- Dedicated Structure for Paths, Advisors, and Future Tracking -->
+        <div class="report-grid">
+          <div class="report-box">
+            <h4>Assigned Path</h4>
+            <p><strong>Primary House:</strong> <span style="color: var(--kamp-dark-teal);">${primaryPath}</span></p>
+            <p><strong>Secondary Focus:</strong> <span style="color: var(--kamp-dark-teal);">${secondaryPath}</span></p>
+          </div>
+          <div class="report-box">
+            <h4>Advising Team</h4>
+            <p><strong>House Advisor:</strong> <span style="color: var(--kamp-dark-teal);">${assignedAdvisors.house}</span></p>
+            <p><strong>Faculty Advisor:</strong> <span style="color: var(--kamp-dark-teal);">${assignedAdvisors.faculty}</span></p>
+          </div>
+        </div>
+
+        <div class="report-box" style="margin-bottom: 15px;">
+          <h4>Suggested Future Coursework</h4>
+          <p><strong>Term 2 Continuation Track:</strong> <span style="color: var(--kamp-dark-teal);">${primaryData.continuation}</span></p>
+          <p><strong>Term 2 Secondary Track:</strong> <span style="color: var(--kamp-dark-teal);">${primaryData.secTrack}</span></p>
+          <p><strong>Projected Senior Mastery Capstone:</strong> <span style="color: var(--kamp-dark-teal);">${primaryData.capstone}</span></p>
+        </div>
+
+        <div style="font-family: 'Belleza', sans-serif; font-size: 0.85rem; color: var(--kamp-dark); padding-left: 5px;">
           <strong>Notes:</strong><br>
-          1. Juvaus Festival (No formal classes).<br><br>
-          <em style="color: var(--kamp-purple);">* Assigned Primary Path: ${primaryPath} | Secondary Focus: ${secondaryPath} *</em><br>
-          <em style="color: var(--kamp-dark-teal);">* Faculty Advisor: ${advisor} *</em><br>
-          <em style="color: var(--kamp-purple);">* Term 2 Continuation Track: ${primaryData.continuation} | ${primaryData.secTrack} *</em><br>
-          <em style="color: var(--kamp-dark-teal);">* Projected Senior Mastery Capstone: ${primaryData.capstone} *</em>
+          1. Juvaus Festival (No formal classes).
         </div>
       `;
-
       document.getElementById("dossier").innerHTML = scheduleHTML;
       
+      // --- 2. Generate Hidden Daily Master Schedule PDF content ---
+      const dailyScheduleHTML = `
+        <div style="padding: 20px; background: #ffffff; color: var(--kamp-dark); border: 2px solid var(--kamp-dark-teal); border-radius: 4px;">
+          <div style="text-align:center; font-family: 'EuroStyle', sans-serif; font-size: 1rem; margin-bottom: 12px; color: var(--kamp-dark-teal);">
+            Daily 36-Hour Cycle mapped for: Student <strong>${studentName.toUpperCase()}</strong> | House <strong>${primaryPath.toUpperCase()}</strong><br>
+            <span style="font-size: 0.8rem; font-family: 'Belleza', sans-serif; display: block; margin-top: 6px;">
+              Accounts for all 6 mandatory class blocks, distinct meal times, daily House responsibilities, campus estate duties, and a dedicated 10-hour sleep recovery cycle.
+            </span>
+          </div>
+          
+          <table class="bureaucratic-table" style="width: 100%; border-collapse: collapse; font-size: 0.85rem; font-family: 'EuroStyle', 'Exo 2', sans-serif; border: 2px solid var(--kamp-purple);">
+            <thead>
+              <tr style="background-color: var(--kamp-purple); color: var(--kamp-gold); text-align: center; font-family: 'Belleza', sans-serif; text-transform: uppercase;">
+                <th colspan="3" style="padding: 10px;">K.A.M.P. DAILY 36-HOUR MASTER SCHEDULE</th>
+              </tr>
+              <tr style="background-color: var(--kamp-gold); color: var(--kamp-purple); font-weight: bold; text-align: left;">
+                <th style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); width: 15%;">Time</th>
+                <th style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); width: 35%;">Block / Activity</th>
+                <th style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); width: 50%;">Details & Duties</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="background-color: var(--table-green);">
+                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); font-weight: bold;">00:00 - 01:30</td>
+                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); color: var(--kamp-purple); font-weight: bold;">Morning Assembly, Breakfast & House Responsibilities</td>
+                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); font-family: 'Belleza', sans-serif;">&bull; Breakfast served in the Main Dining Hall.<br>&bull; House Duties: Dormitory inspections, wing upkeep, and daily roll call supervised by House Den Mothers.</td>
+              </tr>
+              <tr style="background-color: var(--table-cream);">
+                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); font-weight: bold;">01:30 - 05:30</td>
+                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); color: var(--kamp-purple); font-weight: bold;">LONG CLASS 1 (4-Hour Live Daytime Field Lab)</td>
+                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); font-family: 'Belleza', sans-serif;">&bull; Outdoor / Practical Field Work (Martial Practice, Survivalism, Tinkering).</td>
+              </tr>
+              <tr style="background-color: var(--table-green);">
+                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); font-weight: bold;">05:30 - 07:30</td>
+                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); color: var(--kamp-purple); font-weight: bold;">SHORT CLASS 1 (2-Hour Theory / Lecture)</td>
+                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); font-family: 'Belleza', sans-serif;">&bull; Core Theory (History & Applied Tactics, Ethics, Sociology).</td>
+              </tr>
+              <tr style="background-color: var(--table-cream);">
+                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); font-weight: bold;">07:30 - 09:30</td>
+                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); color: var(--kamp-purple); font-weight: bold;">SHORT CLASS 2 (2-Hour Practical Seminar)</td>
+                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); font-family: 'Belleza', sans-serif;">&bull; Applied Fundamentals (Magic Basics, Acoustic Theory, Divine Channeling).</td>
+              </tr>
+              <tr style="background-color: var(--table-green);">
+                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); font-weight: bold;">09:30 - 11:30</td>
+                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); color: var(--kamp-purple); font-weight: bold;">Lunch & Mid-Day Recess</td>
+                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); font-family: 'Belleza', sans-serif;">&bull; Lunch served in the Dining Hall; free time in the Quad or Tower Library.</td>
+              </tr>
+              <tr style="background-color: var(--table-cream);">
+                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); font-weight: bold;">11:30 - 15:30</td>
+                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); color: var(--kamp-purple); font-weight: bold;">Campus Operational Duties (4-Hour Mandatory Duty Block)</td>
+                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); font-family: 'Belleza', sans-serif;">
+                  &bull; Assigned Estate Service:<br>
+                  &nbsp;&nbsp;- <strong>Gryffon:</strong> Perimeter patrols & wilderness foraging.<br>
+                  &nbsp;&nbsp;- <strong>Spynx:</strong> Library cataloging & alchemy lab tech duty.<br>
+                  &nbsp;&nbsp;- <strong>Hydra:</strong> Greenhouse cultivation & ward maintenance.<br>
+                  &nbsp;&nbsp;- <strong>Unycorn:</strong> Campus event staging & aesthetic maintenance.
+                </td>
+              </tr>
+              <tr style="background-color: var(--table-green);">
+                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); font-weight: bold;">15:30 - 17:30</td>
+                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); color: var(--kamp-purple); font-weight: bold;">SHORT CLASS 3 (2-Hour Primary Departmental Major)</td>
+                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); font-family: 'Belleza', sans-serif;">&bull; Specialized Major Electives (GRY-101 / SPH-110 / HYD-101 / UNI-101).</td>
+              </tr>
+              <tr style="background-color: var(--table-cream);">
+                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); font-weight: bold;">17:30 - 19:30</td>
+                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); color: var(--kamp-purple); font-weight: bold;">SHORT CLASS 4 (2-Hour Secondary Elective)</td>
+                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); font-family: 'Belleza', sans-serif;">&bull; Cross-Disciplinary Electives (Flora/Fauna, Subterfuge, Law, Hearth Science).</td>
+              </tr>
+              <tr style="background-color: var(--table-green);">
+                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); font-weight: bold;">19:30 - 21:30</td>
+                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); color: var(--kamp-purple); font-weight: bold;">Dinner Hall & Evening House Fellowship</td>
+                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); font-family: 'Belleza', sans-serif;">&bull; Dinner served in the Great Dining Hall.<br>&bull; House announcements, social dining, and inter-house socializing.</td>
+              </tr>
+              <tr style="background-color: var(--table-cream);">
+                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); font-weight: bold;">21:30 - 25:30</td>
+                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); color: var(--kamp-purple); font-weight: bold;">LONG CLASS 2 (4-Hour Night Field Lab)</td>
+                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); font-family: 'Belleza', sans-serif;">&bull; CORE-106: Celestial Navigation 101 (Terms 1 & 2).<br>&bull; Conducted at the Offshore Lighthouse for star-mapping and ether tracking.</td>
+              </tr>
+              <tr style="background-color: var(--table-green);">
+                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); font-weight: bold;">25:30 - 26:00</td>
+                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); color: var(--kamp-purple); font-weight: bold;">Night Shift Wind-Down & Kodex Sync</td>
+                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); font-family: 'Belleza', sans-serif;">&bull; Return from Lighthouse, log daily progress to personal Kodex slates.</td>
+              </tr>
+              <tr style="background-color: var(--table-cream);">
+                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); font-weight: bold;">26:00 - 36:00</td>
+                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); color: var(--kamp-purple); font-weight: bold;">Rest & Sleep Cycle (10 Hours)</td>
+                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); font-family: 'Belleza', sans-serif;">&bull; Dormitory Quiet Hours under campus sanctuary ward protection.<br>&bull; Full physical and magical recovery.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      `;
+      document.getElementById("daily-dossier").innerHTML = dailyScheduleHTML;
+
+      // Backend submission
       sendToGoogleSheet(primaryPath, secondaryPath, {
         primaryElective: pElec.fullString,
         secondaryElective: sElec.fullString,
@@ -638,11 +824,22 @@
     }
 
     function downloadPDF() {
-      window.scrollTo(0, 0);
       const element = document.getElementById('dossier');
       const opt = {
         margin:       0.4,
-        filename:     `${studentName.replace(/\s+/g, '_')}_KAMP_Schedule.pdf`,
+        filename:     `${studentName.replace(/\s+/g, '_')}_KAMP_Class_Matrix.pdf`,
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2, backgroundColor: null, scrollY: 0 },
+        jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' } 
+      };
+      html2pdf().set(opt).from(element).save();
+    }
+
+    function downloadDailyPDF() {
+      const element = document.getElementById('daily-dossier');
+      const opt = {
+        margin:       0.4,
+        filename:     `${studentName.replace(/\s+/g, '_')}_KAMP_Daily_36hr_Cycle.pdf`,
         image:        { type: 'jpeg', quality: 0.98 },
         html2canvas:  { scale: 2, backgroundColor: null, scrollY: 0 },
         jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' } 
