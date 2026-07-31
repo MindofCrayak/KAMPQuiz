@@ -49,7 +49,7 @@
       max-width: 900px; 
       margin: 0 auto;
       background: url('https://i.imgur.com/ipirojq.png') no-repeat top center;
-      background-size: 100% 100%; /* Prevents pixelated zooming on mobile */
+      background-size: 100% 100%; 
       border: 2px solid var(--kamp-gold);
       border-radius: 8px;
       padding: 40px;
@@ -190,13 +190,12 @@
       transform: translateX(4px);
     }
 
-    /* Container allowing horizontal scroll on mobile so the table doesn't compress */
+    /* Scrollable wrapper for mobile viewing */
     .dossier-wrapper {
       width: 100%;
       overflow-x: auto; 
     }
 
-    /* Urban Fantasy Corporate PDF Container */
     #dossier { 
       padding: 20px; 
       background: #ffffff;
@@ -204,10 +203,9 @@
       border: 2px solid var(--kamp-dark-teal);
       border-radius: 4px;
       margin-bottom: 20px;
-      min-width: 820px; /* Forces wide layout inside the scrollable wrapper */
+      min-width: 820px; 
     }
 
-    /* Bureaucratic Branding Table Classes */
     .bureaucratic-table {
       width: 100%;
       border-collapse: collapse;
@@ -251,23 +249,14 @@
     .schedule-row:nth-child(odd) { background-color: var(--table-green); }
     .schedule-row:nth-child(even) { background-color: var(--table-cream); }
 
-    .course-title {
-      color: var(--kamp-purple);
-      font-weight: bold;
-    }
-    
-    .dossier-course-title {
-      color: var(--kamp-purple);
-      font-weight: bold;
-      text-decoration: underline;
-    }
+    .course-title { color: var(--kamp-purple); font-weight: bold; }
+    .dossier-course-title { color: var(--kamp-purple); font-weight: bold; text-decoration: underline; }
     .course-place { color: var(--kamp-dark-teal); font-weight: bold; }
 
-    /* Report blocks */
     .report-grid {
       display: flex;
       gap: 15px;
-      margin-bottom: 10px; /* Tightened for PDF fitting */
+      margin-bottom: 10px; 
       font-family: 'Belleza', sans-serif;
     }
     
@@ -289,10 +278,7 @@
       letter-spacing: 0.5px;
     }
 
-    .report-box p {
-      margin: 3px 0;
-      font-size: 0.9rem;
-    }
+    .report-box p { margin: 3px 0; font-size: 0.9rem; }
 
     .social-footer {
       margin-top: 30px;
@@ -340,7 +326,7 @@
     @media (max-width: 600px) {
       body { padding: 20px 0; }
       .app-container {
-        padding: 25px 15px; /* Reduces the cramped padding */
+        padding: 25px 15px; 
         width: 95%;
       }
       h1.title { font-size: 1.8rem; }
@@ -398,12 +384,11 @@
     </div>
 
     <div id="step-result" class="hidden">
-      <!-- Wrapper allows horizontal scrolling on mobile to protect the desktop-width matrix -->
       <div class="dossier-wrapper">
         <div id="dossier"></div>
       </div>
       
-      <!-- Offscreen container for daily schedule PDF. Wrapped to hide safely. -->
+      <!-- Offscreen container for daily schedule PDF -->
       <div id="daily-dossier-wrapper" style="display: none; position: absolute; opacity: 0; pointer-events: none; z-index: -100;">
         <div id="daily-dossier" style="width: 1050px;"></div>
       </div>
@@ -433,30 +418,32 @@
   <script>
     const GOOGLE_SHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwx1xjpqKK0o0TWcrd5FjfdZLlhttLlwc3QZZIkeZ6CPVYkSAUah9Vvb0Y3TrOChFtEFQ/exec";
 
+    // Rebuilt exactly from the provided catalog
     const PATH_DATA = {
-      Gryffon: { continuation: "GRY-202 (Advanced Combat & Arena Mechanics)", secTrack: "GRY-210 (Zyng! Practicum & Dungeon Navigation)", capstone: "GRY-300 (Tactical Mastery & Arena Warfare)" },
-      Spynx: { continuation: "SPH-201 (Information Literacy & VR Systems)", secTrack: "SPH-220 (Flora & Fauna Studies - Advanced)", capstone: "SPH-330 (Astrophysics, Realm Traversal & Planar Science)" },
-      Hydra: { continuation: "HYD-215 (Artifact Identification & Arcane Archaeology)", secTrack: "HYD-220 (Applied Necromancy & Spirit Studies)", capstone: "HYD-350 (Mind-Forging & Psionic Metallurgy)" },
-      Unycorn: { continuation: "UNI-202 (Dramatic Arts & Masquerade Pageantry)", secTrack: "UNI-210 (Deception & Subterfuge - Advanced)", capstone: "UNI-300 (Virtuoso Performance & Master Shadowcraft)" }
+      Gryffon: { continuation: "GRY-202: Advanced Combat (A) OR GRY-210: Zyng! Practicum (A)", secTrack: "Frontier Patrol Lead", capstone: "GRY-300: Tactical Mastery (M) OR SPH-320: Fauna & Mutation (M)" },
+      Spynx: { continuation: "SPH-201: Info VR Systems (A) OR DIV-250: Divination Studies (A)", secTrack: "Magitech Lab TA", capstone: "SPH-330: Astrophysics & Realm Traversal (M) OR SPH-320: Fauna Mutation (M)" },
+      Hydra: { continuation: "HYD-215: Arcane Archaeology (A) OR HYD-220: Applied Necromancy (A)", secTrack: "Ward & Shield Maintenance", capstone: "HYD-350: Mind-Forging & Psionic Metallurgy (M) OR HRT-300: Grand Artifact Crafting (M)" },
+      Unycorn: { continuation: "UNI-202: Masquerade Pageantry (A) OR UNI-210: Subterfuge & Leadership (A)", secTrack: "Masquerade Audition Prep", capstone: "UNI-300: Virtuoso Performance (M) OR LEG-300: Corporate Pacts (M)" }
     };
 
     const ADVISORS = {
-      Gryffon: { house: "Commander Lysander Lyteheart", faculty: "Prof. T. Ironarm" },
-      Spynx: { house: "Prof. Yvctus", faculty: "Aukymba" },
-      Hydra: { house: "Lady Byon", faculty: "Tao" },
+      Gryffon: { house: "Commander Lysander Lyteheart", faculty: "Coach Thrain Ironarm" },
+      Spynx: { house: "Prof. Yvctus", faculty: "Aukymba (Mother)" },
+      Hydra: { house: "Lady Byon", faculty: "Tao (Primadonna)" },
       Unycorn: { house: "Flaryotta", faculty: "Shade" }
     };
 
+    // Rebuilt exactly from the provided catalog
     const COURSE_DETAILS = {
-      "GRY-101": { title: "FIELD SECURITY & FRONTIER PATROL", instructor: "C. Lyteheart", place: "GRY-047", fullString: "GRY-101: Field Security & Frontier Patrol (2 Cr)" },
-      "SPH-110": { title: "INTRO TO TINKERING & MAGITECH", instructor: "G. Smoothsmyth", place: "SPH-032", fullString: "SPH-110: Intro to Tinkering & Magitech Systems (2 Cr)" },
-      "SPH-120": { title: "FLORA & FAUNA STUDIES", instructor: "Aukymba", place: "SPH-027", fullString: "SPH-120: Flora & Fauna Studies (2 Cr)" },
-      "HYD-101": { title: "MAGIC BASICS & ARCANE PRECISION", instructor: "L. Byon", place: "HYD-245", fullString: "HYD-101: Magic Basics & Arcane Precision (2 Cr)" },
-      "UNI-101": { title: "ACOUSTIC THEORY & COMPOSITION", instructor: "Flaryotta", place: "UNI-151", fullString: "UNI-101: Acoustic Theory & Musical Composition (2 Cr)" },
-      "UNI-110": { title: "DECEPTION & SUBTERFUGE", instructor: "Shade", place: "UNI-249", fullString: "UNI-110: Deception & Subterfuge (2 Cr)" },
-      "DIV-101": { title: "DIVINE BASICS & FAITH CHANNELING", instructor: "Tao", place: "DIV-211", fullString: "DIV-101: Divine Basics & Faith Channeling (2 Cr)" },
-      "LEG-110": { title: "CIVIC RESPONSIBILITY & PHILANTHROPY", instructor: "P. Kama", place: "LEG-204", fullString: "LEG-110: Civic Responsibility, Public Ethics & Philanthropy (2 Cr)" },
-      "HRT-101": { title: "CULINARY ALCHEMY & HEARTH SCIENCE", instructor: "I. Flamestove", place: "HRT-204", fullString: "HRT-101: Culinary Alchemy & Hearth Science (2 Cr)" }
+      "GRY-101": { title: "FIELD SECURITY & FRONTIER PATROL", instructor: "C. Lyteheart", place: "GRY-047", fullString: "GRY-101: Field Security & Frontier Patrol (B) (2 Cr)" },
+      "SPH-110": { title: "INTRO TO TINKERING & MAGITECH", instructor: "G. Smoothsmyth", place: "SPH-032", fullString: "SPH-110: Intro to Tinkering & Magitech Systems (B) (2 Cr)" },
+      "SPH-120": { title: "FLORA & FAUNA STUDIES", instructor: "Aukymba", place: "SPH-027", fullString: "SPH-120: Flora & Fauna Studies (B) (2 Cr)" },
+      "HYD-101": { title: "MAGIC BASICS & ARCANE PRECISION", instructor: "L. Byon", place: "HYD-245", fullString: "HYD-101: Magic Basics & Arcane Precision (B) (2 Cr)" },
+      "UNI-101": { title: "ACOUSTIC THEORY & COMPOSITION", instructor: "Flaryotta", place: "UNI-151", fullString: "UNI-101: Acoustic Theory & Musical Composition (B) (2 Cr)" },
+      "UNI-110": { title: "DECEPTION & SUBTERFUGE", instructor: "Shade", place: "UNI-249", fullString: "UNI-110: Deception & Subterfuge (B) (2 Cr)" },
+      "DIV-101": { title: "DIVINE BASICS & FAITH CHANNELING", instructor: "Tao / P. Kama", place: "DIV-211", fullString: "DIV-101: Divine Basics & Faith Channeling (B) (2 Cr)" },
+      "LEG-110": { title: "CIVIC RESPONSIBILITY & PHILANTHROPY", instructor: "P. Kama", place: "LEG-204", fullString: "LEG-110: Civic Responsibility, Public Ethics & Philanthropy (B) (2 Cr)" },
+      "HRT-101": { title: "CULINARY ALCHEMY & HEARTH SCIENCE", instructor: "I. Flamestove", place: "HRT-204", fullString: "HRT-101: Culinary Alchemy & Hearth Science (B) (2 Cr)" }
     };
 
     let electiveScores = {
@@ -464,10 +451,9 @@
       "UNI-101": 0, "UNI-110": 0, "DIV-101": 0, "LEG-110": 0, "HRT-101": 0
     };
 
-    // Course codes strictly removed from prompt descriptions
     const QUESTIONS = [
       { id: 1, title: "You are trapped in a room with a rapidly descending ceiling. What is your immediate instinct?", options: [{ text: "Form a disciplined perimeter beneath a structural beam, using physical force and clear squad commands to hold the barrier while guiding others to safety.", scores: { Gryffon: 2, Spynx: 1 }, electives: ["GRY-101"] }, { text: "Examine the wall mechanics, analyzing the pressure plates and gear conduits to disable the counterweight system with targeted tools.", scores: { Spynx: 2, Hydra: 1 }, electives: ["SPH-110"] }, { text: "Calm your heart rate, channeling a focused barrier of force energy or mental spatial warp to cushion the descent while keeping total composure.", scores: { Hydra: 2, Unycorn: 1 }, electives: ["HYD-101"] }, { text: "Jam an iron tool into the gear track with dramatic flair, cracking a joke to prevent panic while using light footwork to spot a hidden hatch.", scores: { Unycorn: 2, Gryffon: 1 }, electives: ["UNI-110"] } ]},
-      { id: 2, title: "Beyond your mandatory core training, which primary departmental elective major do you feel most drawn to for your first term?", options: [{ text: "Field Security & Frontier Patrol: Master perimeter defense protocols, wilderness patrol tactics in the Thyrst River basin, and practical beast deterrence.", scores: { Gryffon: 2, Spynx: 1 }, electives: ["GRY-101", "GRY-101"] }, { text: "Intro to Tinkering & Magitech Systems: Learn CrystalPunk engineering fundamentals, wiring low-yield mana cells, and servicing Kodex slates.", scores: { Spynx: 2, Hydra: 1 }, electives: ["SPH-110", "SPH-110"] }, { text: "Magic Basics & Arcane Precision: Study spell-weaving principles, managing mana burnout, somatic gesture precision, and dueling focus.", scores: { Hydra: 2, Gryffon: 1 }, electives: ["HYD-101", "HYD-101"] }, { text: "Acoustic Theory & Stage Performance: Train in vocal projection, instrumental mastery, acoustic resonance, and morale-building cadence.", scores: { Unycorn: 2, Hydra: 1 }, electives: ["UNI-101", "UNI-101"] } ]},
+      { id: 2, title: "Beyond your mandatory core training, which primary departmental elective major do you feel most drawn to for your first term?", options: [{ text: "Field Security & Frontier Patrol: Master perimeter defense protocols, wilderness patrol tactics in the Thyrst River basin, and practical beast deterrence.", scores: { Gryffon: 2, Spynx: 1 }, electives: ["GRY-101", "GRY-101"] }, { text: "Intro to Tinkering & Magitech Systems: Learn CrystalPunk engineering fundamentals, wiring low-yield mana cells, and servicing Kodex slates.", scores: { Spynx: 2, Hydra: 1 }, electives: ["SPH-110", "SPH-110"] }, { text: "Magic Basics & Arcane Precision: Study spell-weaving principles, managing mana burnout, somatic gesture precision, and dueling focus.", scores: { Hydra: 2, Gryffon: 1 }, electives: ["HYD-101", "HYD-101"] }, { text: "Acoustic Theory & Musical Composition: Train in vocal projection, instrumental mastery, acoustic resonance, and morale-building cadence.", scores: { Unycorn: 2, Hydra: 1 }, electives: ["UNI-101", "UNI-101"] } ]},
       { id: 3, title: "Which secondary cross-disciplinary specialization do you wish to cross-train in during your elective hours?", options: [{ text: "Civic Responsibility & Philanthropy: Study community organization, non-profit outreach, charity management, and civic duties to local settlements.", scores: { Gryffon: 2, Unycorn: 1 }, electives: ["LEG-110", "LEG-110"] }, { text: "Flora & Fauna Studies: Learn ecosystem cataloging, basic monster identification, reagent harvesting, and tracking wild cryptids.", scores: { Spynx: 2, Hydra: 1 }, electives: ["SPH-120", "SPH-120"] }, { text: "Divine Basics & Faith Channeling: Study sacred spellcasting etiquette, divine channel safety, and the domains of the 9 Emissaries.", scores: { Hydra: 2, Spynx: 1 }, electives: ["DIV-101", "DIV-101"] }, { text: "Deception & Subterfuge: Practice sleight of hand, basic disguise techniques, spotting scrying eyes, and security bypass fundamentals.", scores: { Unycorn: 2, Spynx: 1 }, electives: ["UNI-110", "UNI-110"] } ]},
       { id: 4, title: "When setting up a base camp during field operations, which practical service duty do you naturally take charge of?", options: [{ text: "Establishing perimeter watch rotations, clearing sightlines around the clearing, and fortifying heavy physical defenses against threats.", scores: { Gryffon: 2, Spynx: 1 }, electives: ["GRY-101"] }, { text: "Culinary Alchemy & Hearth Science: Utilizing elemental heating and alchemical preservation to turn raw field harvests into restorative rations and tonic salves.", scores: { Spynx: 2, Hydra: 1 }, electives: ["HRT-101", "HRT-101"] }, { text: "Setting up a quiet sanctuary circle away from camp noise to attune to local magical currents and lay down alarm wards.", scores: { Hydra: 2, Gryffon: 1 }, electives: ["DIV-101"] }, { text: "Designing a comfortable, welcoming hearth space, raising squad morale with stories and music, and organizing camp layout aesthetics.", scores: { Unycorn: 2, Hydra: 1 }, electives: ["UNI-101", "HRT-101"] } ]},
       { id: 5, title: "Your squad encounters a reinforced, rusted vault door buried in a ruin with no keyhole. How do you propose opening it?", options: [{ text: "Locate the structural stress points on the hinges and apply a heavy, leveraged physical strike to shatter the degraded latches.", scores: { Gryffon: 2, Spynx: 1 }, electives: ["GRY-101"] }, { text: "Inspect the seams with diagnostic lenses to locate internal magnetic pins, counter-weights, or chemical degradation points.", scores: { Spynx: 2, Hydra: 1 }, electives: ["SPH-110"] }, { text: "Sense the interior space for volatile energy signatures or traps before channeling a localized arcane or psionic pulse to pop the latch.", scores: { Hydra: 2, Unycorn: 1 }, electives: ["HYD-101"] }, { text: "Use slender tension wires, misdirection, and a delicate touch to trick the internal locking mechanism into releasing without noise.", scores: { Unycorn: 2, Gryffon: 1 }, electives: ["UNI-110"] } ]},
@@ -649,7 +635,7 @@
               <td>T. Ironarm</td>
               <td class="course-place">GL-01</td>
               <td>2 / 20T</td>
-              <td>Block A</td>
+              <td>Core</td>
             </tr>
             <tr class="schedule-row">
               <td>CORE104</td>
@@ -659,7 +645,7 @@
               <td>Prof. Yvctus</td>
               <td class="course-place">TWR-04</td>
               <td>2 / 20T</td>
-              <td>Block A</td>
+              <td>Core</td>
             </tr>
             <tr class="schedule-row">
               <td>${pElecCode.replace('-', '')}</td>
@@ -672,12 +658,12 @@
               <td>Primary</td>
             </tr>
             <tr class="schedule-row">
-              <td>CORE106</td>
-              <td class="dossier-course-title">CELESTIAL NAVIGATION 101</td>
+              <td>CORE103</td>
+              <td class="dossier-course-title">LIFE, CULTURES & ETHICS</td>
               <td>P F S V A D L</td>
               <td>3:00PM-4:20PM</td>
-              <td>Olloppa</td>
-              <td class="course-place">LT-HS</td>
+              <td>E. Starflower</td>
+              <td class="course-place">TWR-02</td>
               <td>2 / 30T</td>
               <td>Core</td>
             </tr>
@@ -689,7 +675,7 @@
               <td>S. Satysfaction</td>
               <td class="course-place">WLD-01</td>
               <td>2 / 40T</td>
-              <td>Block B</td>
+              <td>Core</td>
             </tr>
             <tr class="schedule-row">
               <td>${sElecCode.replace('-', '')}</td>
@@ -700,6 +686,16 @@
               <td class="course-place">${sElec.place}</td>
               <td>2 / 20T</td>
               <td>Secondary</td>
+            </tr>
+            <tr class="schedule-row">
+              <td>CORE106</td>
+              <td class="dossier-course-title">CELESTIAL NAVIGATION 101</td>
+              <td>P F S V A D L</td>
+              <td>21:30-25:30</td>
+              <td>Olloppa</td>
+              <td class="course-place">LGH-TS</td>
+              <td>2 / 40T</td>
+              <td>Core</td>
             </tr>
             <tr class="schedule-row">
               <td>FEST000</td>
@@ -771,17 +767,17 @@
               <tr style="background-color: var(--table-cream);">
                 <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); font-weight: bold;">01:30 - 05:30</td>
                 <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); color: var(--kamp-purple); font-weight: bold;">LONG CLASS 1 (Live Daytime Field Lab)</td>
-                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); font-family: 'Belleza', sans-serif;">&bull; Outdoor / Practical Field Work (Martial Practice, Survivalism, Tinkering).</td>
+                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); font-family: 'Belleza', sans-serif;">&bull; CORE-101: Survivalism & Kodex Oath.<br>&bull; Outdoor / Practical Field Work in the Thyrst River basin.</td>
               </tr>
               <tr style="background-color: var(--table-green);">
                 <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); font-weight: bold;">05:30 - 07:30</td>
                 <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); color: var(--kamp-purple); font-weight: bold;">SHORT CLASS 1 (Theory / Lecture)</td>
-                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); font-family: 'Belleza', sans-serif;">&bull; Core Theory (History & Applied Tactics, Ethics, Sociology).</td>
+                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); font-family: 'Belleza', sans-serif;">&bull; CORE-104: History & Applied Tactics.<br>&bull; Core Theory including conflict analysis and Zyng! rules.</td>
               </tr>
               <tr style="background-color: var(--table-cream);">
                 <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); font-weight: bold;">07:30 - 09:30</td>
                 <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); color: var(--kamp-purple); font-weight: bold;">SHORT CLASS 2 (Practical Seminar)</td>
-                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); font-family: 'Belleza', sans-serif;">&bull; Applied Fundamentals (Magic Basics, Acoustic Theory, Divine Channeling).</td>
+                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); font-family: 'Belleza', sans-serif;">&bull; CORE-105: Martial Practice & Arena.<br>&bull; Physical conditioning, squad cohesion, and defensive formations.</td>
               </tr>
               <tr style="background-color: var(--table-green);">
                 <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); font-weight: bold;">09:30 - 11:30</td>
@@ -800,31 +796,36 @@
                 </td>
               </tr>
               <tr style="background-color: var(--table-green);">
-                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); font-weight: bold;">15:30 - 17:30</td>
-                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); color: var(--kamp-purple); font-weight: bold;">SHORT CLASS 3 (Departmental Major)</td>
-                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); font-family: 'Belleza', sans-serif;">&bull; Specialized Major Electives (Field Security / Tinkering / Arcane Precision / Acoustics).</td>
+                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); font-weight: bold;">15:00 - 16:20</td>
+                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); color: var(--kamp-purple); font-weight: bold;">CORE-103: Life, Cultures & Ethics</td>
+                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); font-family: 'Belleza', sans-serif;">&bull; Foundational social studies covering inter-species customs and diplomatic treaties.<br>&bull; Shift overlap with Estate Duties.</td>
               </tr>
               <tr style="background-color: var(--table-cream);">
-                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); font-weight: bold;">17:30 - 19:30</td>
-                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); color: var(--kamp-purple); font-weight: bold;">SHORT CLASS 4 (Secondary Elective)</td>
-                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); font-family: 'Belleza', sans-serif;">&bull; Cross-Disciplinary Electives (Flora/Fauna, Subterfuge, Law, Hearth Science).</td>
+                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); font-weight: bold;">15:30 - 17:30</td>
+                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); color: var(--kamp-purple); font-weight: bold;">SHORT CLASS 3 (Departmental Major)</td>
+                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); font-family: 'Belleza', sans-serif;">&bull; Specialized Beginner (B) Major Elective (Field Security / Tinkering / Arcane Precision / Acoustics).</td>
               </tr>
               <tr style="background-color: var(--table-green);">
+                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); font-weight: bold;">17:30 - 19:30</td>
+                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); color: var(--kamp-purple); font-weight: bold;">SHORT CLASS 4 (Secondary Elective)</td>
+                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); font-family: 'Belleza', sans-serif;">&bull; Cross-Disciplinary Beginner (B) Elective (Flora/Fauna, Subterfuge, Law, Hearth Science).</td>
+              </tr>
+              <tr style="background-color: var(--table-cream);">
                 <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); font-weight: bold;">19:30 - 21:30</td>
                 <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); color: var(--kamp-purple); font-weight: bold;">Dinner Hall & House Fellowship</td>
                 <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); font-family: 'Belleza', sans-serif;">&bull; Dinner served in the Great Dining Hall.<br>&bull; House announcements and inter-house socializing.</td>
               </tr>
-              <tr style="background-color: var(--table-cream);">
+              <tr style="background-color: var(--table-green);">
                 <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); font-weight: bold;">21:30 - 25:30</td>
                 <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); color: var(--kamp-purple); font-weight: bold;">LONG CLASS 2 (Night Field Lab)</td>
                 <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); font-family: 'Belleza', sans-serif;">&bull; CORE-106: Celestial Navigation 101.<br>&bull; Conducted at the Offshore Lighthouse for star-mapping and ether tracking.</td>
               </tr>
-              <tr style="background-color: var(--table-green);">
+              <tr style="background-color: var(--table-cream);">
                 <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); font-weight: bold;">25:30 - 26:00</td>
                 <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); color: var(--kamp-purple); font-weight: bold;">Night Shift Wind-Down & Kodex Sync</td>
-                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); font-family: 'Belleza', sans-serif;">&bull; Return from Lighthouse, log daily progress to personal Kodex slates.</td>
+                <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); font-family: 'Belleza', sans-serif;">&bull; Return from the field, log daily progress to personal Kodex slates.</td>
               </tr>
-              <tr style="background-color: var(--table-cream);">
+              <tr style="background-color: var(--table-green);">
                 <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); font-weight: bold;">26:00 - 36:00</td>
                 <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); color: var(--kamp-purple); font-weight: bold;">Rest & Sleep Cycle (10 Hours)</td>
                 <td style="padding: 8px; border: 1px solid rgba(3, 68, 78, 0.3); font-family: 'Belleza', sans-serif;">&bull; Dormitory Quiet Hours under campus sanctuary ward protection.<br>&bull; Full physical and magical recovery.</td>
@@ -844,36 +845,52 @@
       });
     }
 
+    function prepareForPDF(elementId) {
+      const el = document.getElementById(elementId);
+      el.style.width = '1050px';
+      el.style.maxWidth = '1050px';
+      el.style.margin = '0';
+      return el;
+    }
+
+    function resetAfterPDF(elementId) {
+      const el = document.getElementById(elementId);
+      el.style.width = '';
+      el.style.maxWidth = '';
+    }
+
     function downloadPDF() {
-      const element = document.getElementById('dossier');
+      const element = prepareForPDF('dossier');
       const opt = {
-        margin:       0.2, // Reduced margin to force one-page fit
+        margin:       0.2, 
         filename:     `${studentName.replace(/\s+/g, '_')}_KAMP_Class_Matrix.pdf`,
         image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, backgroundColor: null, scrollY: 0, windowWidth: 1100 }, // Forces desktop width
+        html2canvas:  { scale: 2, backgroundColor: null, scrollY: 0 }, 
         jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' } 
       };
-      html2pdf().set(opt).from(element).save();
+      
+      html2pdf().set(opt).from(element).save().then(() => {
+        resetAfterPDF('dossier');
+      });
     }
 
     function downloadDailyPDF() {
       const wrapper = document.getElementById('daily-dossier-wrapper');
-      const element = document.getElementById('daily-dossier');
+      wrapper.style.display = 'block'; 
       
-      // Temporarily unhide the container so html2canvas can capture it
-      wrapper.style.display = 'block';
+      const element = prepareForPDF('daily-dossier');
 
       const opt = {
         margin:       0.2,
         filename:     `${studentName.replace(/\s+/g, '_')}_KAMP_Daily_36hr_Cycle.pdf`,
         image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, backgroundColor: null, scrollY: 0, windowWidth: 1100 },
+        html2canvas:  { scale: 2, backgroundColor: null, scrollY: 0 },
         jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' } 
       };
       
-      // Use a promise to re-hide the element immediately after saving
       html2pdf().set(opt).from(element).save().then(() => {
-        wrapper.style.display = 'none';
+        resetAfterPDF('daily-dossier');
+        wrapper.style.display = 'none'; 
       });
     }
   </script>
