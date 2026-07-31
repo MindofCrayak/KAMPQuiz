@@ -884,27 +884,57 @@
       });
     }
 
-    // New Native Print Function
-    function printNative(elementId, documentTitle) {
-      const mount = document.getElementById('print-mount');
-      const content = document.getElementById(elementId).innerHTML;
-      
-      // Load content into the temporary mount
-      mount.innerHTML = content;
-      
-      // Temporarily change the document title so the saved PDF has a nice file name
-      const originalTitle = document.title;
-      document.title = `${studentName.replace(/\s+/g, '_')}_KAMP_${documentTitle}`;
-      
-      // Trigger native browser print menu
-      window.print();
-      
-      // Clean up after the print dialog is closed
-      setTimeout(() => {
-        mount.innerHTML = '';
-        document.title = originalTitle;
-      }, 1000);
-    }
+// Completely overhauled native print logic
+function printNative(elementId, documentTitle) {
+  const appContainer = document.querySelector('.app-container');
+  const printMount = document.getElementById('print-mount');
+  
+  // Inject the HTML into the print mount
+  printMount.innerHTML = document.getElementById(elementId).innerHTML;
+  
+  // Physically hide the main app and show the print mount in the DOM
+  appContainer.style.display = 'none';
+  printMount.style.display = 'block';
+  
+  // Clear body background/padding so it doesn't interrupt the print layout
+  const ogBodyBg = document.body.style.background;
+  const ogBodyPadding = document.body.style.padding;
+  document.body.style.background = '#ffffff';
+  document.body.style.padding = '0';
+  
+  // Temporarily change the page title for a clean PDF file name
+  const originalTitle = document.title;
+  document.title = `${studentName.replace(/\s+/g, '_')}_KAMP_${documentTitle}`;
+  
+  // Define a cleanup function to run AFTER printing is complete
+  const cleanupPrint = () => {
+    appContainer.style.display = 'block';
+    printMount.style.display = 'none';
+    printMount.innerHTML = '';
+    
+    document.body.style.background = ogBodyBg;
+    document.body.style.padding = ogBodyPadding;
+    document.title = originalTitle;
+    
+    window.removeEventListener('afterprint', cleanupPrint);
+  };
+
+  // Listen for the native print dialog to close before wiping the DOM
+  window.addEventListener('afterprint', cleanupPrint);
+  
+  // Wait exactly 250 milliseconds to guarantee the browser has painted the DOM changes
+  setTimeout(() => {
+    window.print();
+    
+    // Safety fallback for severely outdated browsers that don't support 'afterprint'
+    // Waits a full 3 minutes before reverting, ensuring the print preview isn't interrupted
+    setTimeout(() => {
+      if (printMount.style.display === 'block') {
+        cleanupPrint();
+      }
+    }, 180000);
+  }, 250);
+}
   </script>
 </body>
 </html>
