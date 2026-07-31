@@ -320,7 +320,11 @@
 
     .hidden { display: none !important; }
 
-    /* NATIVE PRINT CSS - This activates when they hit the print button */
+    /* NATIVE PRINT CSS */
+    #print-mount {
+      display: none; 
+    }
+    
     @media print {
       @page {
         size: letter landscape;
@@ -332,22 +336,17 @@
         padding: 0 !important;
         margin: 0 !important;
       }
-      /* Hide EVERYTHING by default */
-      body * {
-        visibility: hidden;
+      /* Remove the main app UI entirely so it takes up no space */
+      .app-container {
+        display: none !important;
       }
-      /* Show only the print mount container and its children */
-      #print-mount, #print-mount * {
-        visibility: visible;
-      }
+      /* Show ONLY the print mount */
       #print-mount {
-        position: absolute;
-        left: 0;
-        top: 0;
+        display: block !important;
         width: 100%;
         background: #ffffff;
       }
-      /* Force background colors to print */
+      /* Ensure background colors in tables are rendered */
       * {
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
@@ -426,7 +425,7 @@
       
       <!-- Daily Schedule Wrapper. Rendered invisibly on page flow so it correctly scales -->
       <div class="dossier-wrapper" style="height: 0; overflow: hidden; margin: 0; padding: 0; visibility: hidden; position: absolute; z-index: -1;">
-        <div id="daily-dossier" style="width: 1050px;"></div>
+        <div id="daily-dossier" style="width: 100%;"></div>
       </div>
       
       <div class="button-group">
@@ -885,22 +884,17 @@
       });
     }
 
-    // New Native Print Function
     function printNative(elementId, documentTitle) {
       const mount = document.getElementById('print-mount');
       const content = document.getElementById(elementId).innerHTML;
       
-      // Load content into the temporary mount
       mount.innerHTML = content;
       
-      // Temporarily change the document title so the saved PDF has a nice file name
       const originalTitle = document.title;
       document.title = `${studentName.replace(/\s+/g, '_')}_KAMP_${documentTitle}`;
       
-      // Trigger native browser print menu
       window.print();
       
-      // Clean up after the print dialog is closed
       setTimeout(() => {
         mount.innerHTML = '';
         document.title = originalTitle;
