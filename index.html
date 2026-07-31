@@ -190,7 +190,6 @@
       transform: translateX(4px);
     }
 
-    /* Scrollable wrapper for mobile viewing */
     .dossier-wrapper {
       width: 100%;
       overflow-x: auto; 
@@ -322,7 +321,6 @@
 
     .hidden { display: none !important; }
 
-    /* MOBILE RESPONSIVENESS */
     @media (max-width: 600px) {
       body { padding: 20px 0; }
       .app-container {
@@ -344,7 +342,7 @@
 <body>
 
   <div class="app-container">
-    <img src="https://i.imgur.com/jYVn7hK.png" alt="KAMP Logo" class="kamp-logo" id="main-logo">
+    <img src="https://i.imgur.com/jYVn7hK.png" alt="KAMP Logo" class="kamp-logo" id="main-logo" crossorigin="anonymous">
 
     <div id="step-intro">
       <h1 class="title">Official Letter of Acceptance</h1>
@@ -388,7 +386,6 @@
         <div id="dossier"></div>
       </div>
       
-      <!-- Offscreen container for daily schedule PDF -->
       <div id="daily-dossier-wrapper" style="display: none; position: absolute; opacity: 0; pointer-events: none; z-index: -100;">
         <div id="daily-dossier" style="width: 1050px;"></div>
       </div>
@@ -418,7 +415,6 @@
   <script>
     const GOOGLE_SHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwx1xjpqKK0o0TWcrd5FjfdZLlhttLlwc3QZZIkeZ6CPVYkSAUah9Vvb0Y3TrOChFtEFQ/exec";
 
-    // Rebuilt exactly from the provided catalog
     const PATH_DATA = {
       Gryffon: { continuation: "GRY-202: Advanced Combat (A) OR GRY-210: Zyng! Practicum (A)", secTrack: "Frontier Patrol Lead", capstone: "GRY-300: Tactical Mastery (M) OR SPH-320: Fauna & Mutation (M)" },
       Spynx: { continuation: "SPH-201: Info VR Systems (A) OR DIV-250: Divination Studies (A)", secTrack: "Magitech Lab TA", capstone: "SPH-330: Astrophysics & Realm Traversal (M) OR SPH-320: Fauna Mutation (M)" },
@@ -433,7 +429,6 @@
       Unycorn: { house: "Flaryotta", faculty: "Shade" }
     };
 
-    // Rebuilt exactly from the provided catalog
     const COURSE_DETAILS = {
       "GRY-101": { title: "FIELD SECURITY & FRONTIER PATROL", instructor: "C. Lyteheart", place: "GRY-047", fullString: "GRY-101: Field Security & Frontier Patrol (B) (2 Cr)" },
       "SPH-110": { title: "INTRO TO TINKERING & MAGITECH", instructor: "G. Smoothsmyth", place: "SPH-032", fullString: "SPH-110: Intro to Tinkering & Magitech Systems (B) (2 Cr)" },
@@ -595,17 +590,21 @@
       const pElec = COURSE_DETAILS[pElecCode];
       const sElec = COURSE_DETAILS[sElecCode];
 
-      // --- Generate Main Class Schedule ---
+      // --- HTML MATRIX: Table Header replaces Flexbox to prevent PDF squishing ---
       const scheduleHTML = `
-        <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid var(--kamp-purple); padding-bottom: 12px; margin-bottom: 15px;">
-          <img src="https://i.imgur.com/jYVn7hK.png" alt="KAMP Logo" style="width: 110px;">
-          <div style="text-align:right; font-family: 'EuroStyle', sans-serif; font-size: 0.9rem; color: var(--kamp-dark-teal); line-height: 1.4;">
-            <strong style="font-size: 1.2rem; color: var(--kamp-purple);">OFFICIAL SCHEDULE OF CLASSES</strong><br>
-            Student: <strong style="color: var(--kamp-dark);">${studentName.toUpperCase()}</strong> | Term: <strong>1 (Ovesters 1 & 2)</strong><br>
-            <em style="font-size: 0.8rem;">Note: Departmental electives and core courses follow the 9-Day Konran Matrix.</em><br>
-            <span style="font-size: 0.75rem; color: var(--kamp-purple);">P=Pacem, F=Fortudo, S=Sutya, V=Vetyta, J=Juvaus, A=Amzytia, D=Dysci, L=Ludus, G=Grattudo</span>
-          </div>
-        </div>
+        <table style="width: 100%; border-bottom: 2px solid var(--kamp-purple); margin-bottom: 15px; border-collapse: collapse;">
+          <tr>
+            <td style="width: 150px; text-align: left; vertical-align: middle; padding-bottom: 10px;">
+              <img src="https://i.imgur.com/jYVn7hK.png" alt="KAMP Logo" style="width: 110px;" crossorigin="anonymous">
+            </td>
+            <td style="text-align: right; font-family: 'EuroStyle', sans-serif; font-size: 0.9rem; color: var(--kamp-dark-teal); line-height: 1.4; vertical-align: middle; padding-bottom: 10px;">
+              <strong style="font-size: 1.2rem; color: var(--kamp-purple);">OFFICIAL SCHEDULE OF CLASSES</strong><br>
+              Student: <strong style="color: var(--kamp-dark);">${studentName.toUpperCase()}</strong> | Term: <strong>1 (Ovesters 1 & 2)</strong><br>
+              <em style="font-size: 0.8rem;">Note: Departmental electives and core courses follow the 9-Day Konran Matrix.</em><br>
+              <span style="font-size: 0.75rem; color: var(--kamp-purple);">P=Pacem, F=Fortudo, S=Sutya, V=Vetyta, J=Juvaus, A=Amzytia, D=Dysci, L=Ludus, G=Grattudo</span>
+            </td>
+          </tr>
+        </table>
 
         <table class="bureaucratic-table">
           <thead>
@@ -691,11 +690,11 @@
               <td>CORE106</td>
               <td class="dossier-course-title">CELESTIAL NAVIGATION 101</td>
               <td>P F S V A D L</td>
-              <td>21:30-25:30</td>
+              <td>9:30PM-1:30AM</td>
               <td>Olloppa</td>
               <td class="course-place">LGH-TS</td>
               <td>2 / 40T</td>
-              <td>Core</td>
+              <td>Core / Night Lab</td>
             </tr>
             <tr class="schedule-row">
               <td>FEST000</td>
@@ -737,7 +736,6 @@
       `;
       document.getElementById("dossier").innerHTML = scheduleHTML;
       
-      // --- Generate Hidden Daily Master Schedule PDF content ---
       const dailyScheduleHTML = `
         <div style="padding: 20px; background: #ffffff; color: var(--kamp-dark); border: 2px solid var(--kamp-dark-teal); border-radius: 4px;">
           <div style="text-align:center; font-family: 'EuroStyle', sans-serif; font-size: 1rem; margin-bottom: 12px; color: var(--kamp-dark-teal);">
@@ -836,7 +834,6 @@
       `;
       document.getElementById("daily-dossier").innerHTML = dailyScheduleHTML;
 
-      // Backend submission
       sendToGoogleSheet(primaryPath, secondaryPath, {
         primaryElective: pElec.fullString,
         secondaryElective: sElec.fullString,
@@ -845,53 +842,44 @@
       });
     }
 
-    function prepareForPDF(elementId) {
-      const el = document.getElementById(elementId);
-      el.style.width = '1050px';
-      el.style.maxWidth = '1050px';
-      el.style.margin = '0';
-      return el;
-    }
-
-    function resetAfterPDF(elementId) {
-      const el = document.getElementById(elementId);
-      el.style.width = '';
-      el.style.maxWidth = '';
+    // THE FIX: Creates a temporary, off-screen duplicate at desktop width to bypass mobile scaling completely.
+    function generateAndDownloadPDF(elementId, filename) {
+      const original = document.getElementById(elementId);
+      
+      const printContainer = document.createElement('div');
+      printContainer.style.position = 'absolute';
+      printContainer.style.left = '-9999px';
+      printContainer.style.top = '0';
+      printContainer.style.width = '1050px'; 
+      printContainer.style.backgroundColor = '#ffffff';
+      
+      const clone = original.cloneNode(true);
+      clone.style.display = 'block';
+      clone.style.margin = '0';
+      clone.style.minWidth = '1050px';
+      
+      printContainer.appendChild(clone);
+      document.body.appendChild(printContainer);
+      
+      const opt = {
+        margin:       0.2, 
+        filename:     filename,
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2, useCORS: true, backgroundColor: '#ffffff', scrollY: 0 }, 
+        jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' } 
+      };
+      
+      html2pdf().set(opt).from(printContainer).save().then(() => {
+        document.body.removeChild(printContainer);
+      });
     }
 
     function downloadPDF() {
-      const element = prepareForPDF('dossier');
-      const opt = {
-        margin:       0.2, 
-        filename:     `${studentName.replace(/\s+/g, '_')}_KAMP_Class_Matrix.pdf`,
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, backgroundColor: null, scrollY: 0 }, 
-        jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' } 
-      };
-      
-      html2pdf().set(opt).from(element).save().then(() => {
-        resetAfterPDF('dossier');
-      });
+      generateAndDownloadPDF('dossier', `${studentName.replace(/\s+/g, '_')}_KAMP_Class_Matrix.pdf`);
     }
 
     function downloadDailyPDF() {
-      const wrapper = document.getElementById('daily-dossier-wrapper');
-      wrapper.style.display = 'block'; 
-      
-      const element = prepareForPDF('daily-dossier');
-
-      const opt = {
-        margin:       0.2,
-        filename:     `${studentName.replace(/\s+/g, '_')}_KAMP_Daily_36hr_Cycle.pdf`,
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, backgroundColor: null, scrollY: 0 },
-        jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' } 
-      };
-      
-      html2pdf().set(opt).from(element).save().then(() => {
-        resetAfterPDF('daily-dossier');
-        wrapper.style.display = 'none'; 
-      });
+      generateAndDownloadPDF('daily-dossier', `${studentName.replace(/\s+/g, '_')}_KAMP_Daily_36hr_Cycle.pdf`);
     }
   </script>
 </body>
