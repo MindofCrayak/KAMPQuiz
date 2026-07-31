@@ -5,8 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>K.A.M.P. First-Year Registration & Sorting</title>
   
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Belleza&family=Exo+2:wght@400;600&family=Press+Start+2P&display=swap" rel="stylesheet">
@@ -40,6 +38,7 @@
       background: var(--space-dark) url('https://i.imgur.com/rbA1bPE.png') no-repeat center center fixed;
       background-size: cover;
       min-height: 100vh;
+      overflow-x: hidden;
     }
 
     * { box-sizing: border-box; }
@@ -321,6 +320,40 @@
 
     .hidden { display: none !important; }
 
+    /* NATIVE PRINT CSS - This activates when they hit the print button */
+    @media print {
+      @page {
+        size: letter landscape;
+        margin: 0.25in;
+      }
+      body {
+        background: #ffffff !important;
+        background-image: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+      /* Hide EVERYTHING by default */
+      body * {
+        visibility: hidden;
+      }
+      /* Show only the print mount container and its children */
+      #print-mount, #print-mount * {
+        visibility: visible;
+      }
+      #print-mount {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        background: #ffffff;
+      }
+      /* Force background colors to print */
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+    }
+
     @media (max-width: 600px) {
       body { padding: 20px 0; }
       .app-container {
@@ -340,6 +373,9 @@
   </style>
 </head>
 <body>
+
+  <!-- Hidden mount for holding the document when printing natively -->
+  <div id="print-mount"></div>
 
   <div class="app-container">
     <img src="https://i.imgur.com/jYVn7hK.png" alt="KAMP Logo" class="kamp-logo" id="main-logo" crossorigin="anonymous">
@@ -394,8 +430,8 @@
       </div>
       
       <div class="button-group">
-        <button class="btn" onclick="downloadPDF()">PRINT CLASS SCHEDULE (PDF)</button>
-        <button class="btn btn-secondary" onclick="downloadDailyPDF()">PRINT 36-HR DAILY CYCLE (PDF)</button>
+        <button class="btn" onclick="printNative('dossier', 'Class_Matrix')">SAVE CLASS SCHEDULE (PDF)</button>
+        <button class="btn btn-secondary" onclick="printNative('daily-dossier', 'Daily_36hr_Cycle')">SAVE 36-HR DAILY CYCLE (PDF)</button>
       </div>
 
       <div class="social-footer">
@@ -849,32 +885,26 @@
       });
     }
 
-    function downloadPDF() {
-      const element = document.getElementById('dossier');
+    // New Native Print Function
+    function printNative(elementId, documentTitle) {
+      const mount = document.getElementById('print-mount');
+      const content = document.getElementById(elementId).innerHTML;
       
-      const opt = {
-        margin:       0.2, 
-        filename:     `${studentName.replace(/\s+/g, '_')}_KAMP_Class_Matrix.pdf`,
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true, windowWidth: 1200, scrollX: 0, scrollY: 0 }, 
-        jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' } 
-      };
+      // Load content into the temporary mount
+      mount.innerHTML = content;
       
-      html2pdf().set(opt).from(element).save();
-    }
-
-    function downloadDailyPDF() {
-      const element = document.getElementById('daily-dossier');
+      // Temporarily change the document title so the saved PDF has a nice file name
+      const originalTitle = document.title;
+      document.title = `${studentName.replace(/\s+/g, '_')}_KAMP_${documentTitle}`;
       
-      const opt = {
-        margin:       0.2,
-        filename:     `${studentName.replace(/\s+/g, '_')}_KAMP_Daily_36hr_Cycle.pdf`,
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true, windowWidth: 1200, scrollX: 0, scrollY: 0 },
-        jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' } 
-      };
+      // Trigger native browser print menu
+      window.print();
       
-      html2pdf().set(opt).from(element).save();
+      // Clean up after the print dialog is closed
+      setTimeout(() => {
+        mount.innerHTML = '';
+        document.title = originalTitle;
+      }, 1000);
     }
   </script>
 </body>
