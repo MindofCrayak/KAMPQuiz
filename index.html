@@ -151,6 +151,7 @@
       height: 10px;
       width: 100%;
       margin-bottom: 20px;
+      overflow: hidden;
     }
     .progress-bar-fill {
       background: var(--kamp-teal);
@@ -467,6 +468,11 @@
       "HRT-101": { title: "CULINARY ALCHEMY & HEARTH SCIENCE", instructor: "I. Flamestove", place: "HRT-204", fullString: "HRT-101: Culinary Alchemy & Hearth Science (B) (2 Cr)", desc: "Elemental heating to turn raw field harvests into restorative rations." }
     };
 
+    let electiveScores = {
+      "GRY-101": 0, "SPH-110": 0, "SPH-120": 0, "HYD-101": 0,
+      "UNI-101": 0, "UNI-110": 0, "DIV-101": 0, "LEG-110": 0, "HRT-101": 0
+    };
+
     const QUESTIONS = [
       { id: 1, title: "You find a perfectly smooth, featureless black cube sitting in the middle of a crowded crosswalk. It smells faintly of vanilla. What do you do?", options: [{ text: "Report it as a potential environmental hazard, cordon off the area to protect civilians, and wait for clearance.", scores: { Gryffon: 2, Spynx: 1 }, electives: ["GRY-101"] }, { text: "Carefully measure its dimensions, note the scent anomalies, and throw a small pebble at it to test for a kinetic barrier.", scores: { Spynx: 2, Hydra: 1 }, electives: ["SPH-110"] }, { text: "Close your eyes and try to 'listen' to the cube, reaching out with your mind to feel if it has a pulse or magical aura.", scores: { Hydra: 2, Unycorn: 1 }, electives: ["HYD-101"] }, { text: "Lick it. If it smells like vanilla, maybe it tastes like vanilla. Only one way to find out.", scores: { Unycorn: 2, Gryffon: 1 }, electives: ["UNI-110"] } ]},
       { id: 2, title: "If you were forced to replace your left eye with a magical prosthetic that granted one specific vision, which would you choose?", options: [{ text: "The ability to instantly perceive the structural weak points in any physical object or defensive fortification.", scores: { Gryffon: 2, Spynx: 1 }, electives: ["GRY-101", "GRY-101"] }, { text: "The ability to perceive the exact chemical makeup, temperature, and atomic structure of whatever I focus on.", scores: { Spynx: 2, Hydra: 1 }, electives: ["SPH-110", "SPH-110"] }, { text: "The ability to see the emotional auras and lingering spirits of those who have passed through a room.", scores: { Hydra: 2, Gryffon: 1 }, electives: ["HYD-101", "HYD-101"] }, { text: "The ability to see what people look like wearing their most embarrassing childhood outfit.", scores: { Unycorn: 2, Hydra: 1 }, electives: ["UNI-101", "UNI-101"] } ]},
@@ -511,15 +517,28 @@
     }
 
     function renderQuestion() {
+      // Hard clamp the counter so it can never mathematically exceed the array boundary
+      if (currentQ >= QUESTIONS.length) currentQ = QUESTIONS.length - 1;
+      if (currentQ < 0) currentQ = 0;
+
+      // Ensure the container is clickable again
+      document.getElementById("options-container").style.pointerEvents = "auto";
+
       // Trigger CSS animation by removing and quickly re-adding the class
       const animContainer = document.getElementById("quiz-anim-container");
       animContainer.classList.remove("fade-in");
-      void animContainer.offsetWidth; // Trigger DOM reflow
+      void animContainer.offsetWidth; 
       animContainer.classList.add("fade-in");
 
       const q = QUESTIONS[currentQ];
+      if (!q) return; // Ultimate safeguard
+
       document.getElementById("question-count").innerText = `QUESTION ${currentQ + 1} OF ${QUESTIONS.length}`;
-      document.getElementById("progress-fill").style.width = `${((currentQ) / QUESTIONS.length) * 100}%`;
+      
+      // Calculate progress and cap it at 100% to prevent bar overflow
+      const progressPct = Math.min(((currentQ) / QUESTIONS.length) * 100, 100);
+      document.getElementById("progress-fill").style.width = `${progressPct}%`;
+      
       document.getElementById("question-text").innerText = `${q.id}. ${q.title}`;
 
       // Toggle Back Button visibility
@@ -547,21 +566,39 @@
     }
 
     function selectOption(selectedOpt) {
-      userAnswers[currentQ] = selectedOpt;
-      currentQ++;
+      // 1. Immediately disable all pointer events so double-clicks are completely impossible
+      document.getElementById("options-container").style.pointerEvents = "none";
       
-      if (currentQ < QUESTIONS.length) {
-        renderQuestion();
-      } else {
-        processResults();
-      }
+      // 2. Save the answer exactly to the current index
+      userAnswers[currentQ] = selectedOpt;
+      
+      // 3. Process the state change slightly detached so the UI logic locks safely
+      setTimeout(() => {
+        if (currentQ < QUESTIONS.length - 1) {
+            currentQ++;
+            renderQuestion();
+        } else {
+            // Force the counter to stay clamped at the final question length
+            currentQ = QUESTIONS.length; 
+            processResults();
+        }
+      }, 150);
     }
 
     function goBack() {
-      if (currentQ > 0) {
+      // If we are somehow evaluating results and hit back, reset to final index
+      if (currentQ >= QUESTIONS.length) {
+        currentQ = QUESTIONS.length - 1;
+      } else if (currentQ > 0) {
         currentQ--;
-        renderQuestion();
       }
+      
+      // Guarantee we are looking at the quiz step
+      document.getElementById("step-result").classList.add("hidden");
+      document.getElementById("step-tiebreaker").classList.add("hidden");
+      document.getElementById("step-quiz").classList.remove("hidden");
+      
+      renderQuestion();
     }
 
     // New unified scoring function mapped from the saved answers array
@@ -570,18 +607,18 @@
     function processResults() {
       finalPathScores = { Gryffon: 0, Spynx: 0, Hydra: 0, Unycorn: 0 };
       
-      // Reset global elective scores
       for(let key in electiveScores) {
         electiveScores[key] = 0;
       }
 
       userAnswers.forEach(ans => {
-        // Tally Path points
+        if (!ans || !ans.scores) return; // Safeguard against null data
+
         for (const [path, points] of Object.entries(ans.scores)) {
           finalPathScores[path] += points;
         }
-        // Tally Elective points
-        if (ans.electives && ans.electives.length > 0) {
+        
+        if (ans.electives && Array.isArray(ans.electives)) {
           ans.electives.forEach(code => {
             if (electiveScores[code] !== undefined) {
               electiveScores[code] += 1;
@@ -646,15 +683,18 @@
       const sortedPaths = Object.entries(finalPathScores).sort((a, b) => b[1] - a[1]);
       const primaryPath = sortedPaths[0][0];
       const secondaryPath = sortedPaths[1][0];
-      const primaryData = PATH_DATA[primaryPath];
-      const assignedAdvisors = ADVISORS[primaryPath];
+      
+      // Use fallback defaults just in case any mapping breaks
+      const primaryData = PATH_DATA[primaryPath] || { continuation: "TBD", secTrack: "TBD", capstone: "TBD" };
+      const assignedAdvisors = ADVISORS[primaryPath] || { house: "Unassigned", faculty: "Unassigned" };
       
       const sortedElectives = Object.entries(electiveScores).sort((a, b) => b[1] - a[1]);
       
       const pElecCode = sortedElectives[0][0];
       const sElecCode = sortedElectives[1][0];
-      const pElec = COURSE_DETAILS[pElecCode];
-      const sElec = COURSE_DETAILS[sElecCode];
+      const pElec = COURSE_DETAILS[pElecCode] || { title: "Unknown", desc: "", instructor: "Unknown", place: "TBD", fullString: "" };
+      const sElec = COURSE_DETAILS[sElecCode] || { title: "Unknown", desc: "", instructor: "Unknown", place: "TBD", fullString: "" };
+      
       const c105 = COURSE_DETAILS["CORE105"];
       const c104 = COURSE_DETAILS["CORE104"];
       const c103 = COURSE_DETAILS["CORE103"];
