@@ -138,11 +138,10 @@
 
     .button-group {
       display: flex;
+      flex-direction: column;
       gap: 15px;
       margin-top: 20px;
     }
-    
-    .button-group .btn { margin-top: 0; }
 
     .progress-bar-bg {
       background: rgba(3, 68, 78, 0.2);
@@ -198,6 +197,78 @@
       transform: translateX(4px);
     }
 
+    /* --- ID CARD STYLES --- */
+    .id-card-wrapper {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 30px;
+    }
+    
+    .student-id-card {
+      width: 320px;
+      background: linear-gradient(145deg, var(--kamp-dark), var(--kamp-dark-teal));
+      border: 4px solid var(--kamp-gold);
+      border-radius: 12px;
+      padding: 25px 20px;
+      text-align: center;
+      color: var(--kamp-lavender);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.8), inset 0 0 15px rgba(0,0,0,0.4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .id-crest {
+      width: 120px;
+      margin-bottom: 15px;
+      filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.5));
+    }
+
+    .id-title {
+      font-family: 'EuroStyle', 'Exo 2', sans-serif;
+      font-size: 1.5rem;
+      color: var(--kamp-gold);
+      margin: 0 0 5px 0;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .id-subtitle {
+      font-family: 'Belleza', sans-serif;
+      font-size: 0.9rem;
+      color: var(--kamp-mint);
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      border-bottom: 1px solid rgba(188, 219, 176, 0.3);
+      padding-bottom: 10px;
+    }
+
+    .id-field {
+      margin-bottom: 12px;
+      font-size: 1.1rem;
+    }
+
+    .id-label {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--kamp-mint);
+      text-transform: uppercase;
+      margin-bottom: 3px;
+    }
+
+    .id-value {
+      font-family: 'EuroStyle', 'Exo 2', sans-serif;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #ffffff;
+    }
+    
+    .id-value.house-gryffon { color: #e63946; } 
+    .id-value.house-spynx { color: #457b9d; } 
+    .id-value.house-hydra { color: #2a9d8f; } 
+    .id-value.house-unycorn { color: #9b5de5; } 
+
+    /* --- SCHEDULE TABLE STYLES --- */
     .dossier-wrapper {
       width: 100%;
       overflow-x: auto; 
@@ -209,7 +280,7 @@
       color: var(--kamp-dark);
       border: 2px solid var(--kamp-dark-teal);
       border-radius: 4px;
-      margin-bottom: 20px;
+      margin-bottom: 30px;
       min-width: 820px; 
     }
 
@@ -261,32 +332,63 @@
     .course-blurb { font-size: 0.7rem; font-family: 'Belleza', sans-serif; color: var(--kamp-dark-teal); font-style: italic; }
     .course-place { color: var(--kamp-dark-teal); font-weight: bold; }
 
-    .report-grid {
-      display: flex;
-      gap: 15px;
-      margin-bottom: 10px; 
-      font-family: 'Belleza', sans-serif;
-    }
-    
-    .report-box {
-      flex: 1;
-      border: 1px solid var(--kamp-dark-teal);
-      border-radius: 4px;
-      padding: 10px 12px;
-      background: rgba(13, 148, 136, 0.05);
-    }
-    
-    .report-box h4 {
-      margin: 0 0 6px 0;
-      color: var(--kamp-purple);
-      border-bottom: 1px solid var(--kamp-gold);
-      padding-bottom: 4px;
-      font-size: 1.05rem;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+    /* --- EMAIL CAPTURE STYLES --- */
+    .funnel-box {
+      background: rgba(255, 255, 255, 0.4);
+      border: 2px solid var(--kamp-purple);
+      border-radius: 8px;
+      padding: 25px;
+      text-align: center;
+      margin-bottom: 20px;
     }
 
-    .report-box p { margin: 3px 0; font-size: 0.9rem; }
+    .funnel-box h3 {
+      margin: 0 0 15px 0;
+      color: var(--kamp-purple);
+      font-size: 1.4rem;
+    }
+
+    .funnel-box p {
+      font-size: 1rem;
+      color: var(--kamp-dark);
+      margin-bottom: 20px;
+      line-height: 1.4;
+    }
+
+    .email-input {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid var(--kamp-dark-teal);
+      border-radius: 4px;
+      font-family: 'Belleza', sans-serif;
+      font-size: 1.1rem;
+      margin-bottom: 15px;
+      outline: none;
+      background: rgba(255,255,255,0.8);
+    }
+    .email-input:focus {
+      border-color: var(--kamp-purple);
+      background: #ffffff;
+    }
+
+    .checkbox-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      font-size: 0.95rem;
+      font-weight: bold;
+      color: var(--kamp-dark-teal);
+      text-align: left;
+    }
+
+    input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      accent-color: var(--kamp-purple);
+    }
 
     .social-footer {
       margin-top: 30px;
@@ -330,38 +432,27 @@
 
     .hidden { display: none !important; }
 
-    /* ISOLATED PRINT MOUNT CSS */
-    #print-mount {
-      display: none;
-    }
+    #print-mount { display: none; }
 
     @media print {
       @page { 
-        size: letter landscape; 
-        margin: 0.2in; 
+        size: portrait; 
+        margin: 0.5in; 
       }
       body, html { 
         background: #ffffff !important; 
         margin: 0 !important; 
         padding: 0 !important; 
-        overflow: visible !important;
       }
-      
-      /* Completely erase main application tree from print engine */
-      #main-app { 
-        display: none !important; 
+      #main-app { display: none !important; }
+      #print-mount {
+        display: flex !important;
+        justify-content: center;
+        align-items: flex-start;
+        width: 100%;
+        padding-top: 40px;
       }
-
-      /* Force print mount to render full page on stark white */
-      #print-mount { 
-        display: block !important; 
-        width: 100% !important; 
-        margin: 0 !important;
-        padding: 0 !important;
-        background: #ffffff !important;
-      }
-
-      #print-mount * {
+      * {
         -webkit-print-color-adjust: exact !important; 
         print-color-adjust: exact !important;
       }
@@ -371,16 +462,13 @@
       body { padding: 20px 0; }
       .app-container { padding: 25px 15px; width: 95%; }
       h1.title { font-size: 1.8rem; }
-      .letter-content { font-size: 1rem; }
-      .inline-input { width: 100%; max-width: 180px; font-size: 1rem; }
-      .kamp-logo { max-width: 140px; }
-      .button-group { flex-direction: column; gap: 10px; }
+      .student-id-card { width: 100%; max-width: 320px; }
+      .funnel-box { padding: 15px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Isolated container strictly for PDF print spooler -->
   <div id="print-mount"></div>
 
   <div class="app-container" id="main-app">
@@ -400,7 +488,6 @@
           • <strong>Hydra:</strong> The path of the arcane arts, life science, mental discipline, and planar magic.<br>
           • <strong>Unycorn:</strong> The path of performance, music, roguish arts, chance, and magnificent unpredictability.
         </div>
-
         <p>Please ensure the questionnaire is completed with absolute honesty.</p>
         <p><em>— Headmistress Kanyssa Applebaum & Headmistrex Syster Satisfaction</em></p>
       </div>
@@ -413,7 +500,6 @@
         <div class="progress-bar-bg">
           <div id="progress-fill" class="progress-bar-fill"></div>
         </div>
-        
         <div id="question-text" class="question-title"></div>
         <div id="options-container"></div>
       </div>
@@ -429,20 +515,36 @@
     </div>
 
     <div id="step-result" class="hidden">
+      <div class="id-card-wrapper" id="printable-id-wrapper">
+        <div class="student-id-card" id="student-id"></div>
+      </div>
       
-      <!-- Primary Schedule Wrapper -->
+      <div class="button-group" style="margin-bottom: 25px;">
+        <button class="btn btn-secondary" onclick="printNative('student-id', 'Student_ID')">SAVE / PRINT STUDENT ID</button>
+      </div>
+
+      <!-- Main Departmental Schedule now visible on UI with 36-hr formats and 10min gaps -->
       <div class="dossier-wrapper">
         <div id="dossier"></div>
       </div>
       
-      <!-- Daily Schedule Wrapper -->
-      <div class="dossier-wrapper" style="margin-top: 25px;">
+      <!-- 36 Hour Master Schedule now visible on UI with 36-hr formats and 10min gaps -->
+      <div class="dossier-wrapper">
         <div id="daily-dossier"></div>
       </div>
-      
-      <div class="button-group">
-        <button class="btn" onclick="printNative('dossier', 'Class_Matrix')">SAVE CLASS SCHEDULE (PDF)</button>
-        <button class="btn btn-secondary" onclick="printNative('daily-dossier', 'Daily_36hr_Cycle')">SAVE 36-HR DAILY CYCLE (PDF)</button>
+
+      <div class="funnel-box">
+        <h3>Join the Student Register</h3>
+        <p>Register your email below to receive campus updates, campaign lore drops, and future assignments from the academy.</p>
+        
+        <input type="email" id="userEmail" class="email-input" placeholder="Enter your email address..." required>
+        
+        <label class="checkbox-wrap">
+          <input type="checkbox" id="newsletterOptIn" checked>
+          <span>Subscribe to the GMoD communications relay.</span>
+        </label>
+
+        <button class="btn" id="emailSubmitBtn" onclick="submitEmailCapture()">SUBMIT REGISTRATION</button>
       </div>
 
       <div class="social-footer">
@@ -473,7 +575,7 @@
     };
 
     const ADVISORS = {
-      Gryffon: { house: "Commander Lysander Lyteheart", faculty: "Coach Thrain Ironarm" },
+      Gryffon: { house: "Cmdr. Lysander Lyteheart", faculty: "Coach Thrain Ironarm" },
       Spynx: { house: "Prof. Yvctus", faculty: "Aukymba (Mother)" },
       Hydra: { house: "Lady Byon", faculty: "Tao (Primadonna)" },
       Unycorn: { house: "Flaryotta", faculty: "Shade" }
@@ -527,8 +629,10 @@
     let parentName = "";
     let studentName = "";
     let currentQ = 0;
-    
     let userAnswers = [];
+    
+    // Clean, normal save data struct
+    let globalSaveData = {};
 
     function startQuiz() {
       parentName = document.getElementById("playerName").value.trim();
@@ -677,18 +781,6 @@
       }
     }
 
-    function sendToGoogleSheet(primaryPath, secondaryPath, pd) {
-      if (!GOOGLE_SHEET_SCRIPT_URL) return;
-      const formattedScores = Object.entries(finalPathScores).filter(([path, pts]) => pts > 0).map(([path, pts]) => `${path}: ${pts}`).join(" | ");
-      const payload = {
-        parentName: parentName, studentName: studentName, primaryPath: primaryPath, secondaryPath: secondaryPath,
-        elective: pd.primaryElective, duty: pd.secondaryElective, club: pd.continuation, goal: pd.capstone, scores: formattedScores
-      };
-      fetch(GOOGLE_SHEET_SCRIPT_URL, {
-        method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain" }, body: JSON.stringify(payload)
-      }).catch(err => console.error("Database logging error:", err));
-    }
-
     function generateSchedule() {
       document.getElementById("main-logo").classList.add("hidden");
       document.getElementById("step-result").classList.remove("hidden");
@@ -713,6 +805,44 @@
       const c101 = COURSE_DETAILS["CORE101"];
       const c106 = COURSE_DETAILS["CORE106"];
 
+      globalSaveData = {
+        primaryPath: primaryPath,
+        secondaryPath: secondaryPath,
+        pElec: pElec.fullString,
+        sElec: sElec.fullString,
+        continuation: primaryData.continuation,
+        capstone: primaryData.capstone
+      };
+
+      // 1. Generate ID Card
+      const idHTML = `
+        <img src="https://i.imgur.com/jYVn7hK.png" alt="KAMP Crest" class="id-crest" crossorigin="anonymous">
+        <h2 class="id-title">STUDENT I.D.</h2>
+        <div class="id-subtitle">TERM 1 / FIRST-YEAR</div>
+        
+        <div class="id-field">
+          <span class="id-label">Student Name</span>
+          <span class="id-value">${studentName.toUpperCase()}</span>
+        </div>
+        
+        <div class="id-field">
+          <span class="id-label">Primary Path (House)</span>
+          <span class="id-value house-${primaryPath.toLowerCase()}">${primaryPath.toUpperCase()}</span>
+        </div>
+        
+        <div class="id-field">
+          <span class="id-label">Secondary Aptitude</span>
+          <span class="id-value">${secondaryPath.toUpperCase()}</span>
+        </div>
+        
+        <div class="id-field" style="margin-top: 15px;">
+          <span class="id-label">House Advisor</span>
+          <span class="id-value" style="font-size: 1rem;">${assignedAdvisors.house}</span>
+        </div>
+      `;
+      document.getElementById("student-id").innerHTML = idHTML;
+
+      // 2. Generate Departmental Matrix (With 36-hr formats and 10 min transit gaps)
       const scheduleHTML = `
         <table style="width: 100%; border-bottom: 2px solid var(--kamp-purple); margin-bottom: 15px; border-collapse: collapse;">
           <tr>
@@ -752,7 +882,7 @@
               <td>CORE105</td>
               <td><span class="dossier-course-title">${c105.title}</span><span class="course-blurb">${c105.desc}</span></td>
               <td>P S A L</td>
-              <td>8:00AM-9:50AM</td>
+              <td>08:00 - 09:50</td>
               <td>${c105.instructor}</td>
               <td class="course-place">${c105.place}</td>
               <td>2 / 20T</td>
@@ -762,7 +892,7 @@
               <td>CORE104</td>
               <td><span class="dossier-course-title">${c104.title}</span><span class="course-blurb">${c104.desc}</span></td>
               <td>P S A L</td>
-              <td>10:00AM-11:50AM</td>
+              <td>10:00 - 11:50</td>
               <td>${c104.instructor}</td>
               <td class="course-place">${c104.place}</td>
               <td>2 / 20T</td>
@@ -772,7 +902,7 @@
               <td>${pElecCode.replace('-', '')}</td>
               <td><span class="dossier-course-title">${pElec.title}</span><span class="course-blurb">${pElec.desc}</span></td>
               <td>P S A L</td>
-              <td>1:00PM-2:50PM</td>
+              <td>13:00 - 14:50</td>
               <td>${pElec.instructor}</td>
               <td class="course-place">${pElec.place}</td>
               <td>2 / 20T</td>
@@ -782,7 +912,7 @@
               <td>CORE103</td>
               <td><span class="dossier-course-title">${c103.title}</span><span class="course-blurb">${c103.desc}</span></td>
               <td>P F S V A D L</td>
-              <td>3:00PM-4:20PM</td>
+              <td>15:00 - 16:20</td>
               <td>${c103.instructor}</td>
               <td class="course-place">${c103.place}</td>
               <td>2 / 30T</td>
@@ -792,7 +922,7 @@
               <td>CORE101</td>
               <td><span class="dossier-course-title">${c101.title}</span><span class="course-blurb">${c101.desc}</span></td>
               <td>F V D G</td>
-              <td>8:00AM-11:50AM</td>
+              <td>08:00 - 11:50</td>
               <td>${c101.instructor}</td>
               <td class="course-place">${c101.place}</td>
               <td>2 / 40T</td>
@@ -802,7 +932,7 @@
               <td>${sElecCode.replace('-', '')}</td>
               <td><span class="dossier-course-title">${sElec.title}</span><span class="course-blurb">${sElec.desc}</span></td>
               <td>F V D G</td>
-              <td>1:00PM-2:50PM</td>
+              <td>13:00 - 14:50</td>
               <td>${sElec.instructor}</td>
               <td class="course-place">${sElec.place}</td>
               <td>2 / 20T</td>
@@ -812,7 +942,7 @@
               <td>CORE106</td>
               <td><span class="dossier-course-title">${c106.title}</span><span class="course-blurb">${c106.desc}</span></td>
               <td>P F S V A D L</td>
-              <td>11:30PM-1:30AM</td>
+              <td>23:30 - 25:30</td>
               <td>${c106.instructor}</td>
               <td class="course-place">${c106.place}</td>
               <td>2 / 40T</td>
@@ -830,34 +960,10 @@
             </tr>
           </tbody>
         </table>
-
-        <div class="report-grid">
-          <div class="report-box">
-            <h4>Assigned Path</h4>
-            <p><strong>Primary House:</strong> <span style="color: var(--kamp-dark-teal);">${primaryPath}</span></p>
-            <p><strong>Secondary Focus:</strong> <span style="color: var(--kamp-dark-teal);">${secondaryPath}</span></p>
-          </div>
-          <div class="report-box">
-            <h4>Advising Team</h4>
-            <p><strong>House Advisor:</strong> <span style="color: var(--kamp-dark-teal);">${assignedAdvisors.house}</span></p>
-            <p><strong>Faculty Advisor:</strong> <span style="color: var(--kamp-dark-teal);">${assignedAdvisors.faculty}</span></p>
-          </div>
-        </div>
-
-        <div class="report-box" style="margin-bottom: 12px;">
-          <h4>Suggested Future Coursework</h4>
-          <p><strong>Term 2 Continuation Track:</strong> <span style="color: var(--kamp-dark-teal);">${primaryData.continuation}</span></p>
-          <p><strong>Term 2 Secondary Track:</strong> <span style="color: var(--kamp-dark-teal);">${primaryData.secTrack}</span></p>
-          <p><strong>Projected Senior Mastery Capstone:</strong> <span style="color: var(--kamp-dark-teal);">${primaryData.capstone}</span></p>
-        </div>
-
-        <div style="font-family: 'Belleza', sans-serif; font-size: 0.85rem; color: var(--kamp-dark); padding-left: 5px;">
-          <strong>Notes:</strong><br>
-          1. Juvaus Festival (No formal classes).
-        </div>
       `;
       document.getElementById("dossier").innerHTML = scheduleHTML;
-      
+
+      // 3. Generate 36 Hour Schedule (With 36-hr formats and 10 min transit gaps synced)
       const dailyScheduleHTML = `
         <div style="border-radius: 4px; padding-bottom: 5px;">
           <table style="width: 100%; border-bottom: 2px solid var(--kamp-purple); margin-bottom: 12px; border-collapse: collapse;">
@@ -878,8 +984,8 @@
                 <th colspan="3" style="padding: 6px;">K.A.M.P. DAILY 36-HOUR MASTER SCHEDULE</th>
               </tr>
               <tr style="background-color: var(--kamp-gold); color: var(--kamp-purple); font-weight: bold; text-align: left;">
-                <th style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); width: 14%;">Time</th>
-                <th style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); width: 33%;">Block / Activity</th>
+                <th style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); width: 15%;">Time</th>
+                <th style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); width: 32%;">Block / Activity</th>
                 <th style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); width: 53%;">Details & Duties</th>
               </tr>
             </thead>
@@ -890,107 +996,164 @@
                 <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); font-family: 'Belleza', sans-serif; line-height: 1.2;">&bull; Breakfast served in the Main Dining Hall.<br>&bull; House Duties: Dormitory inspections and daily roll call.</td>
               </tr>
               <tr style="background-color: var(--table-cream);">
-                <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); font-weight: bold;">01:30 - 05:30</td>
+                <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); font-weight: bold;">01:40 - 05:30</td>
                 <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); color: var(--kamp-purple); font-weight: bold;">LONG CLASS 1 (Live Daytime Field Lab)</td>
-                <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); font-family: 'Belleza', sans-serif; line-height: 1.2;">&bull; CORE-101: Survivalism & Kodex Oath.<br>&bull; Outdoor / Practical Field Work in the Thyrst River basin.</td>
+                <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); font-family: 'Belleza', sans-serif; line-height: 1.2;">&bull; e.g. CORE-101: Survivalism & Kodex Oath.<br>&bull; Outdoor / Practical Field Work in the Thyrst River basin.</td>
               </tr>
               <tr style="background-color: var(--table-green);">
-                <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); font-weight: bold;">05:30 - 07:30</td>
+                <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); font-weight: bold;">05:40 - 07:30</td>
                 <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); color: var(--kamp-purple); font-weight: bold;">SHORT CLASS 1 (Theory / Lecture)</td>
-                <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); font-family: 'Belleza', sans-serif; line-height: 1.2;">&bull; CORE-104: History & Applied Tactics.<br>&bull; Core Theory including conflict analysis and Zyng! rules.</td>
+                <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); font-family: 'Belleza', sans-serif; line-height: 1.2;">&bull; e.g. CORE-104: History & Applied Tactics.</td>
               </tr>
               <tr style="background-color: var(--table-cream);">
-                <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); font-weight: bold;">07:30 - 09:30</td>
+                <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); font-weight: bold;">07:40 - 09:30</td>
                 <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); color: var(--kamp-purple); font-weight: bold;">SHORT CLASS 2 (Practical Seminar)</td>
-                <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); font-family: 'Belleza', sans-serif; line-height: 1.2;">&bull; CORE-105: Martial Practice & Arena.<br>&bull; Physical conditioning, squad cohesion, and defensive formations.</td>
+                <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); font-family: 'Belleza', sans-serif; line-height: 1.2;">&bull; e.g. CORE-105: Martial Practice & Arena.</td>
               </tr>
               <tr style="background-color: var(--table-green);">
-                <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); font-weight: bold;">09:30 - 11:30</td>
+                <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); font-weight: bold;">09:40 - 11:30</td>
                 <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); color: var(--kamp-purple); font-weight: bold;">Lunch & Mid-Day Recess</td>
                 <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); font-family: 'Belleza', sans-serif; line-height: 1.2;">&bull; Lunch served in the Dining Hall; free time in the Quad or Tower Library.</td>
               </tr>
               <tr style="background-color: var(--table-cream);">
-                <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); font-weight: bold;">11:30 - 15:30</td>
+                <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); font-weight: bold;">11:40 - 15:30</td>
                 <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); color: var(--kamp-purple); font-weight: bold;">Campus Operational Duties</td>
                 <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); font-family: 'Belleza', sans-serif; line-height: 1.2;">
                   &bull; Assigned Estate Service:<br>
-                  &nbsp;&nbsp;- <strong>Gryffon:</strong> Perimeter patrols & wilderness foraging.<br>
-                  &nbsp;&nbsp;- <strong>Spynx:</strong> Library cataloging & alchemy lab tech duty.<br>
-                  &nbsp;&nbsp;- <strong>Hydra:</strong> Greenhouse cultivation & ward maintenance.<br>
-                  &nbsp;&nbsp;- <strong>Unycorn:</strong> Campus event staging & aesthetic maintenance.
+                  &nbsp;&nbsp;- <strong>Gryffon:</strong> Perimeter patrols.<br>
+                  &nbsp;&nbsp;- <strong>Spynx:</strong> Alchemy lab tech duty.<br>
+                  &nbsp;&nbsp;- <strong>Hydra:</strong> Ward maintenance.<br>
+                  &nbsp;&nbsp;- <strong>Unycorn:</strong> Campus event staging.
                 </td>
               </tr>
               <tr style="background-color: var(--table-green);">
-                <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); font-weight: bold;">15:00 - 16:20</td>
+                <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); font-weight: bold;">15:40 - 17:00</td>
                 <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); color: var(--kamp-purple); font-weight: bold;">CORE-103: Life, Cultures & Ethics</td>
-                <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); font-family: 'Belleza', sans-serif; line-height: 1.2;">&bull; Foundational social studies covering inter-species customs and diplomatic treaties.</td>
+                <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); font-family: 'Belleza', sans-serif; line-height: 1.2;">&bull; Foundational social studies and diplomacy.</td>
               </tr>
               <tr style="background-color: var(--table-cream);">
-                <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); font-weight: bold;">15:30 - 17:30</td>
+                <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); font-weight: bold;">17:10 - 19:00</td>
                 <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); color: var(--kamp-purple); font-weight: bold;">SHORT CLASS 3 (Departmental Major)</td>
-                <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); font-family: 'Belleza', sans-serif; line-height: 1.2;">&bull; Specialized Beginner (B) Major Elective (Field Security / Tinkering / Arcane Precision / Acoustics).</td>
+                <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); font-family: 'Belleza', sans-serif; line-height: 1.2;">&bull; Specialized Beginner (B) Major Elective.</td>
               </tr>
               <tr style="background-color: var(--table-green);">
-                <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); font-weight: bold;">17:30 - 19:30</td>
+                <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); font-weight: bold;">19:10 - 21:00</td>
                 <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); color: var(--kamp-purple); font-weight: bold;">SHORT CLASS 4 (Secondary Elective)</td>
-                <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); font-family: 'Belleza', sans-serif; line-height: 1.2;">&bull; Cross-Disciplinary Beginner (B) Elective (Flora/Fauna, Subterfuge, Law, Hearth Science).</td>
+                <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); font-family: 'Belleza', sans-serif; line-height: 1.2;">&bull; Cross-Disciplinary Beginner (B) Elective.</td>
               </tr>
               <tr style="background-color: var(--table-cream);">
-                <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); font-weight: bold;">19:30 - 21:30</td>
+                <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); font-weight: bold;">21:10 - 22:30</td>
                 <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); color: var(--kamp-purple); font-weight: bold;">Dinner Hall & House Fellowship</td>
                 <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); font-family: 'Belleza', sans-serif; line-height: 1.2;">&bull; Dinner served in the Great Dining Hall.<br>&bull; House announcements and inter-house socializing.</td>
               </tr>
               <tr style="background-color: var(--table-green);">
-                <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); font-weight: bold;">21:30 - 23:30</td>
+                <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); font-weight: bold;">22:40 - 24:30</td>
                 <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); color: var(--kamp-purple); font-weight: bold;">LONG CLASS 2 (Night Field Lab)</td>
-                <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); font-family: 'Belleza', sans-serif; line-height: 1.2;">&bull; Night Field Lab & Nocturnal Survival.<br>&bull; Conducted in the wild for low-light survival tracking.</td>
+                <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); font-family: 'Belleza', sans-serif; line-height: 1.2;">&bull; Night Field Lab & Nocturnal Survival.</td>
               </tr>
               <tr style="background-color: var(--table-cream);">
-                <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); font-weight: bold;">23:30 - 25:30</td>
+                <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); font-weight: bold;">24:40 - 26:30</td>
                 <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); color: var(--kamp-purple); font-weight: bold;">CORE-106: Celestial Navigation 101</td>
-                <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); font-family: 'Belleza', sans-serif; line-height: 1.2;">&bull; Conducted at the Offshore Lighthouse for star-mapping and ether tracking.</td>
+                <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); font-family: 'Belleza', sans-serif; line-height: 1.2;">&bull; Conducted at the Offshore Lighthouse.</td>
               </tr>
               <tr style="background-color: var(--table-green);">
-                <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); font-weight: bold;">25:30 - 26:00</td>
+                <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); font-weight: bold;">26:40 - 27:00</td>
                 <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); color: var(--kamp-purple); font-weight: bold;">Night Shift Wind-Down & Kodex Sync</td>
-                <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); font-family: 'Belleza', sans-serif; line-height: 1.2;">&bull; Return from the field, log daily progress to personal Kodex slates.</td>
+                <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); font-family: 'Belleza', sans-serif; line-height: 1.2;">&bull; Return from the field, log daily progress.</td>
               </tr>
               <tr style="background-color: var(--table-cream);">
-                <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); font-weight: bold;">26:00 - 36:00</td>
-                <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); color: var(--kamp-purple); font-weight: bold;">Rest & Sleep Cycle (10 Hours)</td>
-                <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); font-family: 'Belleza', sans-serif; line-height: 1.2;">&bull; Dormitory Quiet Hours under campus sanctuary ward protection.<br>&bull; Full physical and magical recovery.</td>
+                <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); font-weight: bold;">27:00 - 36:00</td>
+                <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); color: var(--kamp-purple); font-weight: bold;">Rest & Sleep Cycle</td>
+                <td style="padding: 4px 6px; border: 1px solid rgba(3, 68, 78, 0.3); font-family: 'Belleza', sans-serif; line-height: 1.2;">&bull; Dormitory Quiet Hours under campus sanctuary ward protection.</td>
               </tr>
             </tbody>
           </table>
         </div>
       `;
       document.getElementById("daily-dossier").innerHTML = dailyScheduleHTML;
+      
+      // Perform silent baseline save of the student data
+      sendToGoogleSheet(null, false);
+    }
 
-      sendToGoogleSheet(primaryPath, secondaryPath, {
-        primaryElective: pElec.fullString,
-        secondaryElective: sElec.fullString,
-        continuation: primaryData.continuation,
-        capstone: primaryData.capstone
+    function submitEmailCapture() {
+      const emailField = document.getElementById("userEmail");
+      const email = emailField.value.trim();
+      const wantsNewsletter = document.getElementById("newsletterOptIn").checked;
+
+      if (!email || !email.includes("@")) {
+        return alert("Please enter a valid email address!");
+      }
+
+      const btn = document.getElementById("emailSubmitBtn");
+      btn.innerText = "TRANSMITTING...";
+      btn.style.pointerEvents = "none";
+
+      sendToGoogleSheet(email, wantsNewsletter).then(() => {
+        btn.innerText = "REGISTRATION COMPLETE!";
+        btn.style.background = "var(--kamp-mint)";
+        btn.style.color = "var(--kamp-dark)";
+        btn.style.borderColor = "var(--kamp-mint)";
+        emailField.disabled = true;
+        document.getElementById("newsletterOptIn").disabled = true;
+      }).catch(() => {
+        btn.innerText = "ERROR - TRY AGAIN";
+        btn.style.pointerEvents = "auto";
       });
     }
 
-    // STRICT PRINT ENGINE
+    // Cleaned up payload: Just standard data + Email/OptIn
+    async function sendToGoogleSheet(email = null, newsletter = false) {
+      if (!GOOGLE_SHEET_SCRIPT_URL) return;
+      
+      const formattedScores = Object.entries(finalPathScores).filter(([path, pts]) => pts > 0).map(([path, pts]) => `${path}: ${pts}`).join(" | ");
+      
+      const payload = {
+        parentName: parentName, 
+        studentName: studentName, 
+        primaryPath: globalSaveData.primaryPath, 
+        secondaryPath: globalSaveData.secondaryPath,
+        elective: globalSaveData.pElec, 
+        duty: globalSaveData.sElec, 
+        club: globalSaveData.continuation, 
+        goal: globalSaveData.capstone, 
+        scores: formattedScores,
+        email: email || "N/A",
+        newsletterOptIn: newsletter ? "YES" : "NO"
+      };
+
+      return fetch(GOOGLE_SHEET_SCRIPT_URL, {
+        method: "POST", 
+        mode: "no-cors", 
+        headers: { "Content-Type": "text/plain" }, 
+        body: JSON.stringify(payload)
+      });
+    }
+
+    // NATIVE PRINT: Just clones and prints the isolated ID card
     function printNative(elementId, documentTitle) {
       const originalTitle = document.title;
       document.title = `${studentName.replace(/\s+/g, '_')}_KAMP_${documentTitle}`;
 
+      const mainApp = document.getElementById('main-app');
       const targetElement = document.getElementById(elementId);
+      
+      const printClone = targetElement.cloneNode(true);
+      printClone.id = "active-print-clone";
+      
+      printClone.style.cssText = "display: block !important; visibility: visible !important; position: static !important; width: 320px !important; margin: 0 auto !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;";
+
+      mainApp.style.display = 'none';
+      
       const printMount = document.getElementById('print-mount');
+      printMount.appendChild(printClone);
       
-      // Inject pure HTML into isolated print mount
-      printMount.innerHTML = targetElement.innerHTML;
-      
-      // Trigger native spooler
       setTimeout(() => {
         window.print();
-        printMount.innerHTML = ""; // Clean up after print dialog closes
+        printMount.removeChild(printClone);
+        mainApp.style.display = 'block';
         document.title = originalTitle;
-      }, 100); 
+      }, 300); 
     }
   </script>
 </body>
