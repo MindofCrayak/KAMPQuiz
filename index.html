@@ -7,7 +7,8 @@
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Belleza&family=Exo+2:wght@400;600&family=Press+Start+2P&display=swap" rel="stylesheet">
+  <!-- Updated Google Fonts to include Ephesis, Cherish, and Grey Qo -->
+  <link href="https://fonts.googleapis.com/css2?family=Belleza&family=Cherish&family=Ephesis&family=Exo+2:wght@400;600&family=Grey+Qo&display=swap" rel="stylesheet">
 
   <style>
     @font-face {
@@ -63,13 +64,59 @@
       margin: 0 auto 20px auto;
     }
 
-    h1.title {
+    /* --- NEW TYPOGRAPHY STYLES --- */
+    .font-ephesis { font-family: 'Ephesis', cursive; }
+    .font-grey-qo { font-family: 'Grey Qo', cursive; }
+    .font-cherish { font-family: 'Cherish', cursive; }
+
+    .letter-h1 {
       color: var(--kamp-purple);
       text-align: center;
+      font-size: 4.5rem; /* Large enough to read the cursive */
+      margin: 0;
+      font-weight: normal;
+    }
+
+    .letter-h2 {
+      color: var(--kamp-dark-teal);
+      text-align: center;
+      font-size: 3rem;
+      margin: 0 0 15px 0;
+      font-weight: normal;
+    }
+
+    .letter-h3 {
+      color: var(--kamp-purple);
+      text-align: center;
+      font-size: 1.6rem;
+      margin: 15px 0;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .kamp-divider {
+      border: 0;
+      height: 2px;
+      background: var(--kamp-gold);
+      margin: 20px auto;
+      width: 80%;
+    }
+
+    .signature-block {
+      margin-top: 40px;
+      text-align: right;
+      padding-right: 20px;
+    }
+
+    .signature-mistress {
       font-size: 2.5rem;
-      margin: 10px 0;
-      border-bottom: 2px solid var(--kamp-gold);
-      padding-bottom: 10px;
+      color: var(--kamp-dark);
+      margin-bottom: 10px;
+    }
+
+    .signature-mistrex {
+      font-size: 2.5rem;
+      color: var(--kamp-dark);
     }
 
     .letter-content {
@@ -461,7 +508,8 @@
     @media (max-width: 600px) {
       body { padding: 20px 0; }
       .app-container { padding: 25px 15px; width: 95%; }
-      h1.title { font-size: 1.8rem; }
+      .letter-h1 { font-size: 3.5rem; }
+      .letter-h2 { font-size: 2.2rem; }
       .student-id-card { width: 100%; max-width: 320px; }
       .funnel-box { padding: 15px; }
     }
@@ -475,9 +523,15 @@
     <img src="https://i.imgur.com/jYVn7hK.png" alt="KAMP Logo" class="kamp-logo" id="main-logo" crossorigin="anonymous">
 
     <div id="step-intro">
-      <h1 class="title">Official Letter of Acceptance</h1>
+      <h1 class="letter-h1 font-ephesis">Congratulations</h1>
+      <h2 class="letter-h2 font-ephesis">You're going to K.A.M.P!</h2>
+      
+      <hr class="kamp-divider">
+      <h3 class="letter-h3">Official letter of acceptance</h3>
+      <hr class="kamp-divider">
+
       <div class="letter-content">
-        <p>Dear <input type="text" id="playerName" class="inline-input" placeholder="Parent/Guardian Name">,</p>
+        <p>Dear <input type="text" id="playerName" class="inline-input" placeholder="Player Name">,</p>
         <p>The Konran Academy of Might & Proficiency (K.A.M.P.) is pleased to inform you that your ward, <input type="text" id="charName" class="inline-input" placeholder="Student Name">, has been accepted for the upcoming academic term.</p>
         <p>Before arriving on campus, all incoming students must complete the Student Intake & Aspirations Questionnaire. This evaluation will determine their Primary Path and assign them to one of our esteemed faculty advisors.</p>
         
@@ -489,7 +543,11 @@
           • <strong>Unycorn:</strong> The path of performance, music, roguish arts, chance, and magnificent unpredictability.
         </div>
         <p>Please ensure the questionnaire is completed with absolute honesty.</p>
-        <p><em>— Headmistress Kanyssa Applebaum & Headmistrex Syster Satisfaction</em></p>
+        
+        <div class="signature-block">
+          <div class="signature-mistress font-grey-qo">— Headmistress Kanyssa Applebaum</div>
+          <div class="signature-mistrex font-cherish">& Headmistrex Syster Satisfaction</div>
+        </div>
       </div>
       <button class="btn" onclick="startQuiz()">COMMENCE EVALUATION</button>
     </div>
@@ -523,12 +581,10 @@
         <button class="btn btn-secondary" onclick="printNative('student-id', 'Student_ID')">SAVE / PRINT STUDENT ID</button>
       </div>
 
-      <!-- Main Departmental Schedule now visible on UI with 36-hr formats and 10min gaps -->
       <div class="dossier-wrapper">
         <div id="dossier"></div>
       </div>
       
-      <!-- 36 Hour Master Schedule now visible on UI with 36-hr formats and 10min gaps -->
       <div class="dossier-wrapper">
         <div id="daily-dossier"></div>
       </div>
@@ -639,7 +695,7 @@
       studentName = document.getElementById("charName").value.trim();
       
       if (!parentName || !studentName) {
-        return alert("Please enter both the Parent/Guardian Name and the Student Name!");
+        return alert("Please enter both the Player Name and the Student Name!");
       }
 
       document.getElementById("step-intro").classList.add("hidden");
