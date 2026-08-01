@@ -160,7 +160,6 @@
       transition: width 0.3s ease;
     }
 
-    /* Animation Class */
     .fade-in {
       animation: fadeIn 0.4s ease-out forwards;
     }
@@ -331,12 +330,41 @@
 
     .hidden { display: none !important; }
 
-    #print-mount { display: none; }
+    /* ISOLATED PRINT MOUNT CSS */
+    #print-mount {
+      display: none;
+    }
 
     @media print {
-      @page { size: letter landscape; margin: 0.25in; }
-      body, html { background: #ffffff !important; margin: 0 !important; padding: 0 !important; }
-      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+      @page { 
+        size: letter landscape; 
+        margin: 0.2in; 
+      }
+      body, html { 
+        background: #ffffff !important; 
+        margin: 0 !important; 
+        padding: 0 !important; 
+        overflow: visible !important;
+      }
+      
+      /* Completely erase main application tree from print engine */
+      #main-app { 
+        display: none !important; 
+      }
+
+      /* Force print mount to render full page on stark white */
+      #print-mount { 
+        display: block !important; 
+        width: 100% !important; 
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #ffffff !important;
+      }
+
+      #print-mount * {
+        -webkit-print-color-adjust: exact !important; 
+        print-color-adjust: exact !important;
+      }
     }
 
     @media (max-width: 600px) {
@@ -352,7 +380,7 @@
 </head>
 <body>
 
-  <!-- Hidden mount for holding the document when printing natively -->
+  <!-- Isolated container strictly for PDF print spooler -->
   <div id="print-mount"></div>
 
   <div class="app-container" id="main-app">
@@ -407,9 +435,9 @@
         <div id="dossier"></div>
       </div>
       
-      <!-- Daily Schedule Wrapper. Rendered invisibly on page flow so it correctly scales -->
-      <div class="dossier-wrapper" style="height: 0; overflow: hidden; margin: 0; padding: 0; visibility: hidden; position: absolute; z-index: -1;">
-        <div id="daily-dossier" style="width: 1050px;"></div>
+      <!-- Daily Schedule Wrapper -->
+      <div class="dossier-wrapper" style="margin-top: 25px;">
+        <div id="daily-dossier"></div>
       </div>
       
       <div class="button-group">
@@ -500,7 +528,6 @@
     let studentName = "";
     let currentQ = 0;
     
-    // Store user's selected option object for each question to allow going back
     let userAnswers = [];
 
     function startQuiz() {
@@ -517,31 +544,26 @@
     }
 
     function renderQuestion() {
-      // Hard clamp the counter so it can never mathematically exceed the array boundary
       if (currentQ >= QUESTIONS.length) currentQ = QUESTIONS.length - 1;
       if (currentQ < 0) currentQ = 0;
 
-      // Ensure the container is clickable again
       document.getElementById("options-container").style.pointerEvents = "auto";
 
-      // Trigger CSS animation by removing and quickly re-adding the class
       const animContainer = document.getElementById("quiz-anim-container");
       animContainer.classList.remove("fade-in");
       void animContainer.offsetWidth; 
       animContainer.classList.add("fade-in");
 
       const q = QUESTIONS[currentQ];
-      if (!q) return; // Ultimate safeguard
+      if (!q) return;
 
       document.getElementById("question-count").innerText = `QUESTION ${currentQ + 1} OF ${QUESTIONS.length}`;
       
-      // Calculate progress and cap it at 100% to prevent bar overflow
       const progressPct = Math.min(((currentQ) / QUESTIONS.length) * 100, 100);
       document.getElementById("progress-fill").style.width = `${progressPct}%`;
       
       document.getElementById("question-text").innerText = `${q.id}. ${q.title}`;
 
-      // Toggle Back Button visibility
       const backBtn = document.getElementById("btn-back");
       if (currentQ > 0) {
         backBtn.classList.remove("hidden");
@@ -552,7 +574,6 @@
       const optsContainer = document.getElementById("options-container");
       optsContainer.innerHTML = "";
 
-      // Clone and shuffle options to randomize order
       const shuffledOptions = [...q.options].sort(() => Math.random() - 0.5);
 
       shuffledOptions.forEach((opt) => {
@@ -566,19 +587,14 @@
     }
 
     function selectOption(selectedOpt) {
-      // 1. Immediately disable all pointer events so double-clicks are completely impossible
       document.getElementById("options-container").style.pointerEvents = "none";
-      
-      // 2. Save the answer exactly to the current index
       userAnswers[currentQ] = selectedOpt;
       
-      // 3. Process the state change slightly detached so the UI logic locks safely
       setTimeout(() => {
         if (currentQ < QUESTIONS.length - 1) {
             currentQ++;
             renderQuestion();
         } else {
-            // Force the counter to stay clamped at the final question length
             currentQ = QUESTIONS.length; 
             processResults();
         }
@@ -586,14 +602,12 @@
     }
 
     function goBack() {
-      // If we are somehow evaluating results and hit back, reset to final index
       if (currentQ >= QUESTIONS.length) {
         currentQ = QUESTIONS.length - 1;
       } else if (currentQ > 0) {
         currentQ--;
       }
       
-      // Guarantee we are looking at the quiz step
       document.getElementById("step-result").classList.add("hidden");
       document.getElementById("step-tiebreaker").classList.add("hidden");
       document.getElementById("step-quiz").classList.remove("hidden");
@@ -601,7 +615,6 @@
       renderQuestion();
     }
 
-    // New unified scoring function mapped from the saved answers array
     let finalPathScores = { Gryffon: 0, Spynx: 0, Hydra: 0, Unycorn: 0 };
     
     function processResults() {
@@ -612,7 +625,7 @@
       }
 
       userAnswers.forEach(ans => {
-        if (!ans || !ans.scores) return; // Safeguard against null data
+        if (!ans || !ans.scores) return;
 
         for (const [path, points] of Object.entries(ans.scores)) {
           finalPathScores[path] += points;
@@ -684,7 +697,6 @@
       const primaryPath = sortedPaths[0][0];
       const secondaryPath = sortedPaths[1][0];
       
-      // Use fallback defaults just in case any mapping breaks
       const primaryData = PATH_DATA[primaryPath] || { continuation: "TBD", secTrack: "TBD", capstone: "TBD" };
       const assignedAdvisors = ADVISORS[primaryPath] || { house: "Unassigned", faculty: "Unassigned" };
       
@@ -848,12 +860,17 @@
       
       const dailyScheduleHTML = `
         <div style="border-radius: 4px; padding-bottom: 5px;">
-          <div style="text-align:center; font-family: 'EuroStyle', sans-serif; font-size: 0.95rem; margin-bottom: 8px; color: var(--kamp-dark-teal);">
-            Daily 36-Hour Cycle mapped for: Student <strong>${studentName.toUpperCase()}</strong> | House <strong>${primaryPath.toUpperCase()}</strong><br>
-            <span style="font-size: 0.75rem; font-family: 'Belleza', sans-serif; display: block; margin-top: 4px;">
-              Accounts for all 6 mandatory class blocks, distinct meal times, daily House responsibilities, campus estate duties, and a dedicated 10-hour sleep recovery cycle.
-            </span>
-          </div>
+          <table style="width: 100%; border-bottom: 2px solid var(--kamp-purple); margin-bottom: 12px; border-collapse: collapse;">
+            <tr>
+              <td style="width: 130px; text-align: left; vertical-align: middle;">
+                <img src="https://i.imgur.com/jYVn7hK.png" alt="KAMP Logo" style="width: 90px;" crossorigin="anonymous">
+              </td>
+              <td style="text-align: right; font-family: 'EuroStyle', sans-serif; font-size: 0.85rem; color: var(--kamp-dark-teal); line-height: 1.3; vertical-align: middle;">
+                <strong style="font-size: 1.1rem; color: var(--kamp-purple);">DAILY 36-HOUR MASTER CYCLE</strong><br>
+                Student: <strong>${studentName.toUpperCase()}</strong> | Primary House: <strong>${primaryPath.toUpperCase()}</strong>
+              </td>
+            </tr>
+          </table>
           
           <table style="width: 100%; border-collapse: collapse; font-size: 0.78rem; font-family: 'EuroStyle', 'Exo 2', sans-serif; border: 2px solid var(--kamp-purple);">
             <thead>
@@ -957,25 +974,23 @@
       });
     }
 
+    // STRICT PRINT ENGINE
     function printNative(elementId, documentTitle) {
       const originalTitle = document.title;
       document.title = `${studentName.replace(/\s+/g, '_')}_KAMP_${documentTitle}`;
 
-      const mainApp = document.getElementById('main-app');
       const targetElement = document.getElementById(elementId);
+      const printMount = document.getElementById('print-mount');
       
-      const printClone = targetElement.cloneNode(true);
-      printClone.style.cssText = "display: block !important; visibility: visible !important; position: relative !important; height: auto !important; width: 1050px; background: #ffffff; margin: 0;";
-
-      mainApp.style.display = 'none';
-      document.body.appendChild(printClone);
+      // Inject pure HTML into isolated print mount
+      printMount.innerHTML = targetElement.innerHTML;
       
+      // Trigger native spooler
       setTimeout(() => {
         window.print();
-        document.body.removeChild(printClone);
-        mainApp.style.display = 'block';
+        printMount.innerHTML = ""; // Clean up after print dialog closes
         document.title = originalTitle;
-      }, 300); 
+      }, 100); 
     }
   </script>
 </body>
