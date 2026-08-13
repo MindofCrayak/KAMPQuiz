@@ -397,7 +397,7 @@
 <body>
 
   <div class="app-container" id="main-app">
-    <img src="https://i.imgur.com/jYVn7hK.png" alt="KAMP Logo" class="kamp-logo" id="main-logo" crossorigin="anonymous">
+<img src="https://i.imgur.com/QMjoDIg.png" alt="KAMP Header" class="kamp-logo" id="main-logo" crossorigin="anonymous" style="max-width: 300px;">
 
     <div id="step-intro">
       <h1 class="letter-h1 font-ephesis">Congratulations</h1>
@@ -409,7 +409,9 @@
 
       <div class="letter-content">
         <p>Dear <input type="text" id="playerName" class="inline-input" placeholder="Player Name">,</p>
-        <p>The Konran Academy of Might & Proficiency (K.A.M.P.) is pleased to inform you that your ward, <input type="text" id="charName" class="inline-input" placeholder="Student Name">, has been accepted for the upcoming academic term.</p>
+        
+        <p>We are pleased to inform you that your ward, <input type="text" id="charName" class="inline-input" placeholder="Student Name">, has been accepted at the Konran Academy of Might & Proficiency as a First-Year Student!</p>
+        
         <p>Before arriving on campus, all incoming students must complete the Student Intake & Aspirations Questionnaire. This evaluation will determine their Primary Path and assign them to one of our esteemed faculty advisors.</p>
         
         <div class="house-desc">
@@ -419,11 +421,21 @@
           • <strong>Hydra:</strong> The path of the arcane arts, life science, mental discipline, and planar magic.<br>
           • <strong>Unycorn:</strong> The path of performance, music, roguish arts, chance, and magnificent unpredictability.
         </div>
+
+        <p>The Term starts on Solisvara 19, we look forward to seeing you and your ward at the start of term.</p>
+        
+        <p>Please sign below to reserve their place,</p>
+        
+        <!-- Player Signature Line -->
+        <div style="text-align: center; margin: 30px 0;">
+          <span style="font-size: 1.5rem; color: var(--kamp-purple); margin-right: 10px;">X</span><input type="text" class="inline-input font-ephesis" style="font-size: 2rem; width: 250px; padding-bottom: 0;" placeholder="Signature">
+        </div>
+
         <p>Please ensure the questionnaire is completed with absolute honesty.</p>
         
         <div class="signature-block">
           <div class="signature-mistress font-grey-qo">— Headmistress Kanyssa Applebaum</div>
-          <div class="signature-mistrex font-cherish">& Headmistrex Syster Satisfaction</div>
+          <div class="signature-mistrex font-cherish">— Headmistrex Syster Satisfaction</div>
         </div>
       </div>
       <button class="btn" onclick="startQuiz()">COMMENCE EVALUATION</button>
